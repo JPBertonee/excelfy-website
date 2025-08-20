@@ -1,59 +1,169 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>excelFy — Digital Products Collection</title>
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/globals.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>excelFy Digital Products</title>
+
+  <!-- Tailwind (igual que tu versión) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tu CSS separado -->
+  <link rel="stylesheet" href="/styles/globals.css">
 </head>
 <body>
-  <!-- Fondo con partículas -->
-  <canvas id="bg"></canvas>
-
-  <!-- Ornamento esquina sup. izq (anillo) -->
-  <div class="corner-orb"><span></span></div>
-
-  <!-- Header centrado -->
-  <header class="site-header" aria-label="Header">
-    <h1 class="brand">
-      <span class="brand-excel">excel</span><span class="brand-fy">Fy</span>
-    </h1>
-    <p class="tagline">Digital Products Collection</p>
-  </header>
-
-  <!-- Acciones arriba a la derecha -->
-  <div class="top-actions">
-    <button class="icon-btn" id="infoBtn" aria-label="Info">i</button>
-    <a href="#" class="pill-btn" id="aboutBtn">About Us</a>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-logo logo-glow">
+      <span style="color: white;">excel</span><span style="color: #8DCFB0;">Fy</span>
+    </div>
+    <div class="loading-bar"><div class="loading-progress"></div></div>
+    <p style="color:#8DCFB0;margin-top:1rem;font-size:1.1rem;">Cargando experiencia increíble...</p>
   </div>
 
-  <!-- Carpeta central -->
-  <main class="hero" aria-label="Main">
-    <div class="folder">
-      <div class="folder-tab"></div>
-      <div class="folder-lip"></div>
-      <div class="folder-logo">
-        <span class="in-excel">excel</span><span class="in-fy">Fy</span>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="cursor"></div>
+
+  <!-- Particles -->
+  <div class="particles-container" id="particles"></div>
+
+  <!-- Breadcrumbs -->
+  <div id="breadcrumbs" class="breadcrumbs">
+    <span class="breadcrumb-item" onclick="goHome()">Inicio</span>
+  </div>
+
+  <!-- Easter Egg Modal -->
+  <div id="easterEggModal" class="easter-egg-modal">
+    <div class="easter-egg-content">
+      <h2 style="font-size:2.5rem;margin-bottom:1rem;font-weight:900;">🎉 ¡DESCUENTO SECRETO! 🎉</h2>
+      <p style="font-size:1.3rem;margin-bottom:1.5rem;font-weight:600;">¡Has encontrado el código secreto!</p>
+      <div style="background:rgba(0,0,0,0.2);padding:1rem;border-radius:10px;margin:1rem 0;">
+        <p style="font-size:1.1rem;margin-bottom:0.5rem;">Usa el código:</p>
+        <p style="font-size:2rem;font-weight:900;letter-spacing:3px;">EXCELFY10</p>
+      </div>
+      <p style="font-size:1rem;margin-bottom:1.5rem;">Para obtener 10% de descuento en cualquier producto</p>
+      <button onclick="closeEasterEgg()" style="padding:.8rem 2rem;background:#0f0f0f;color:#8DCFB0;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .3s;">
+        ¡Genial!
+      </button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="absolute top-0 left-0 w-full z-20 p-6">
+    <div class="text-center logo-container">
+      <h1 class="text-2xl font-bold logo-glow" id="mainLogo">
+        <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
+      </h1>
+      <p class="text-lg" style="color:#8DCFB0;">Digital Products Collection</p>
+    </div>
+
+    <!-- Theme & About -->
+    <div class="absolute top-6 right-6 flex gap-3 items-center">
+      <button id="themeToggle" onclick="toggleTheme()" class="glass" style="padding:.5rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:50%;font-size:1rem;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center"
+        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.1)'"
+        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">
+        ◐
+      </button>
+
+      <button onclick="showAboutPage()" class="glass" style="padding:.5rem 1rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:25px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
+        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.05)'"
+        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">
+        About Us
+      </button>
+    </div>
+  </div>
+
+  <!-- Carpeta principal -->
+  <div id="folderContainer" class="folder-container">
+    <div class="folder pulse-animation" onclick="showProducts()">
+      <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+        <img src="https://i.ibb.co/MytD6V85/Folder-icon.png" alt="Folder-icon" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);drop-shadow(0 8px 16px rgba(0,0,0,.3));"/>
+        <img id="folderLogo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png" style="position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);width:50%;height:auto;transition:opacity .3s;z-index:2;"/>
       </div>
     </div>
-  </main>
+  </div>
+
+  <!-- Lista de productos -->
+  <div id="productsContainer" class="products-container">
+    <div class="arrow-back" onclick="showFolder()" style="position:absolute;right:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;opacity:0;animation:fadeIn .5s ease 1.2s forwards;font-family:Arial,sans-serif;font-weight:bold"
+      onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
+      onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
+
+    <h1 class="product-title" onclick="showProductPage('trackerfy')"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
+    <h1 class="product-title" onclick="showProductPage('budgetfy')"><span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span></h1>
+    <h1 class="product-title" onclick="showProductPage('investfy')"><span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span></h1>
+    <h1 class="product-title" onclick="showProductPage('loanfy')"><span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span></h1>
+  </div>
+
+  <!-- Detalle producto -->
+  <div id="productPage" class="product-page">
+    <div class="arrow-back" onclick="hideProductPage()" style="position:absolute;left:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold"
+      onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
+      onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
+
+    <h1 id="productPageTitle" class="product-page-title"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
+
+    <div class="product-page-image glass">
+      <span style="color:#8DCFB0;font-size:2rem;font-weight:600;">Product Image</span>
+    </div>
+
+    <div id="productPageDescription" class="product-page-description">
+      Track your daily habits and goals with customizable templates and progress charts.
+    </div>
+
+    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass" style="margin-top:1rem;padding:.7rem 1.5rem;background:#8DCFB0;color:#0f0f0f;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
+      onmouseover="this.style.background='#4FA985';this.style.transform='scale(1.05)'" onmouseout="this.style.background='#8DCFB0';this.style.transform='scale(1)'">
+      View on Etsy
+    </button>
+  </div>
+
+  <!-- About -->
+  <div id="aboutPage" class="about-page">
+    <button onclick="hideAboutPage()" style="position:absolute;left:2rem;top:2rem;cursor:pointer;font-size:2rem;color:#8DCFB0;background:none;border:none;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold;z-index:25;padding:.5rem"
+      onmouseover="this.style.color='#4FA985';this.style.transform='scale(1.2)'" onmouseout="this.style.color='#8DCFB0';this.style.transform='scale(1)'">✕</button>
+
+    <div class="about-content">
+      <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:900;margin-bottom:2rem;text-align:center;color:white;">
+        About <span style="color:#8DCFB0;">excelFy</span>
+      </h1>
+
+      <div style="max-width:600px;text-align:center;color:#ffffff;font-size:1.1rem;line-height:1.6;margin:0 auto 2rem auto;">
+        <p style="margin-bottom:1rem;">We create elegant Excel templates that help you track, manage, and achieve your goals with style and functionality.</p>
+        <p style="color:#8DCFB0;font-weight:600;">Transform your productivity with excelFy - where organization meets innovation.</p>
+      </div>
+
+      <div style="display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:1rem;">
+        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #8DCFB0;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
+            <span style="color:#8DCFB0;font-size:1rem;font-weight:600;">Nahuel</span>
+          </div>
+          <h3 style="color:#8DCFB0;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
+          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Technical expert</p>
+        </div>
+
+        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #4FA985;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
+            <span style="color:#4FA985;font-size:1rem;font-weight:600;">Juan</span>
+          </div>
+          <h3 style="color:#4FA985;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
+          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Creative designer</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <p>© 2025 excelFy. All rights reserved.</p>
-    <a href="https://www.etsy.com" target="_blank" rel="noopener">Visit our Etsy Store</a>
-  </footer>
-
-  <!-- Modal About -->
-  <section class="about-modal" id="aboutModal" aria-hidden="true">
-    <div class="about-card">
-      <button class="close-x" id="closeAbout" aria-label="Cerrar">✕</button>
-      <h2>About <span>excelFy</span></h2>
-      <p>Creamos plantillas elegantes y funcionales de Excel y Google Sheets (bilingües) para finanzas personales, PyMEs y dashboards.</p>
+  <div class="absolute bottom-0 left-0 w-full z-20 p-4">
+    <div class="flex justify-between items-center text-sm" style="color:#8DCFB0;">
+      <p>© 2025 excelFy. All rights reserved.</p>
+      <a href="https://www.etsy.com" target="_blank" class="hover:underline transition-all duration-300" style="color:#4FA985;">Visit our Etsy Store</a>
     </div>
-  </section>
+  </div>
 
-  <script src="/scripts/main.js" defer></script>
+  <!-- Tu JS separado (sin Cloudflare) -->
+  <script src="/scripts/main.js"></script>
 </body>
 </html>
