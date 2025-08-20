@@ -138,7 +138,7 @@ function initEasterEgg(){
     if(seq.length>target.length) seq.shift();
     if(JSON.stringify(seq)===JSON.stringify(target)) openEgg();
   });
-  document.getElementById('eggClose').addEventListener('click', closeEasterEgg);
+  document.getElementById('eggClose')?.addEventListener('click', closeEasterEgg);
 }
 function openEgg(){ document.getElementById('easterEggModal').classList.add('show'); }
 function closeEasterEgg(){ document.getElementById('easterEggModal').classList.remove('show'); }
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   initEasterEgg();
 });
 
-/* Expose (for inline onclicks in HTML) */
+/* Expose for inline handlers */
 window.toggleTheme=toggleTheme;
 window.showProducts=showProducts;
 window.showFolder=showFolder;
