@@ -5,20 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>excelFy — Digital Products</title>
 
-  <!-- Keep relative paths stable everywhere (Pages/Vercel/local) -->
   <base href="./">
-
-  <!-- Tailwind (optional utility classes) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="styles/global.css?v=4">
+  <link rel="stylesheet" href="styles/global.css?v=5">
 </head>
 <body>
-  <!-- Data background -->
+  <!-- Data background (no intercepta clics) -->
   <canvas id="dataCanvas" aria-hidden="true"></canvas>
 
   <!-- Loader with percentage -->
@@ -28,9 +21,7 @@
         <span class="loader-brand">excel<span>Fy</span></span>
         <span id="loaderPct" class="loader-pct">0%</span>
       </div>
-      <div class="loader-bar">
-        <div id="loaderProgress" class="loader-progress" style="width:0%"></div>
-      </div>
+      <div class="loader-bar"><div id="loaderProgress" class="loader-progress"></div></div>
       <p class="loading-copy">Loading a data-driven experience…</p>
     </div>
   </div>
@@ -62,16 +53,16 @@
   <section id="productsContainer" class="products-container" aria-label="Products">
     <div class="arrow-back" onclick="showFolder()" aria-label="Back to folder">◀</div>
 
-    <h1 class="product-title" onclick="showProductPage('trackerfy')">
+    <h1 class="product-title" role="button" tabindex="0" onclick="showProductPage('trackerfy')">
       <span style="color:#fff;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
     </h1>
-    <h1 class="product-title" onclick="showProductPage('budgetfy')">
+    <h1 class="product-title" role="button" tabindex="0" onclick="showProductPage('budgetfy')">
       <span style="color:#fff;">Budget</span><span style="color:#4FA985;">Fy</span>
     </h1>
-    <h1 class="product-title" onclick="showProductPage('investfy')">
+    <h1 class="product-title" role="button" tabindex="0" onclick="showProductPage('investfy')">
       <span style="color:#fff;">Invest</span><span style="color:#36A96B;">Fy</span>
     </h1>
-    <h1 class="product-title" onclick="showProductPage('loanfy')">
+    <h1 class="product-title" role="button" tabindex="0" onclick="showProductPage('loanfy')">
       <span style="color:#fff;">Loan</span><span style="color:#2D6B4F;">Fy</span>
     </h1>
   </section>
@@ -92,9 +83,7 @@
       Track your daily habits and goals with customizable templates and progress charts.
     </div>
 
-    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass product-cta">
-      View on Etsy
-    </button>
+    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass product-cta">View on Etsy</button>
   </section>
 
   <!-- About page -->
@@ -103,19 +92,16 @@
 
     <div class="about-content">
       <h1 class="about-title">About <span>excelFy</span></h1>
-
       <div class="about-text">
         <p>We craft elegant, functional templates for Excel and Google Sheets to help you track, manage and visualize your data.</p>
         <p class="about-highlight">Boost your productivity with excelFy — where organization meets insight.</p>
       </div>
-
       <div class="about-team">
         <div class="about-card glass">
           <div class="avatar mint"><span>Nahuel</span></div>
           <h3 class="role mint">Co-Founder</h3>
           <p class="bio">Technical expert</p>
         </div>
-
         <div class="about-card glass">
           <div class="avatar green"><span>Juan</span></div>
           <h3 class="role green">Co-Founder</h3>
@@ -145,7 +131,6 @@
     <a href="https://www.etsy.com" target="_blank" rel="noopener">Visit our Etsy Store</a>
   </footer>
 
-  <!-- Scripts -->
-  <script src="scripts/main.js?v=4" defer></script>
+  <script src="scripts/main.js?v=5" defer></script>
 </body>
 </html>

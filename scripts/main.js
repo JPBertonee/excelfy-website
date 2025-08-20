@@ -1,4 +1,4 @@
-/* ====================== THEME ====================== */
+/* ========== THEME ========== */
 function toggleTheme(){
   const b=document.body, btn=document.getElementById('themeToggle');
   b.classList.toggle('light-theme');
@@ -7,24 +7,24 @@ function toggleTheme(){
   localStorage.setItem('theme', light ? 'light' : 'dark');
 }
 
-/* ====================== LOADER (percentage) ====================== */
+/* ========== LOADER (percentage) ========== */
 function startLoader(){
   const wrap=document.getElementById('loadingScreen');
   const bar=document.getElementById('loaderProgress');
   const pct=document.getElementById('loaderPct');
   let p=0;
   const t=setInterval(()=>{
-    p = Math.min(100, p + Math.floor(Math.random()*7)+3); // 3–9%
+    p = Math.min(100, p + Math.floor(Math.random()*7)+3);
     bar.style.width = p + '%';
     pct.textContent = p + '%';
     if(p>=100){
       clearInterval(t);
-      setTimeout(()=>{ wrap.style.display='none'; }, 250);
+      setTimeout(()=>{ wrap.style.display='none'; }, 220);
     }
   }, 100);
 }
 
-/* ====================== DATA CANVAS ====================== */
+/* ========== DATA CANVAS (letters & numbers) ========== */
 let dc, ctx, W, H, points=[], mouse={x:-9999,y:-9999};
 const GLYPHS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -74,17 +74,19 @@ function tick(){
   requestAnimationFrame(tick);
 }
 
-/* ====================== NAVIGATION ====================== */
+/* ========== NAVIGATION (folder <-> list) ========== */
 function showProducts(){
   document.getElementById('folderContainer').classList.add('opened');
-  document.getElementById('productsContainer').classList.add('show');
+  const list=document.getElementById('productsContainer');
+  list.classList.add('show');
 }
 function showFolder(){
   document.getElementById('folderContainer').classList.remove('opened');
   document.getElementById('productsContainer').classList.remove('show');
+  hideProductPage();
 }
 
-/* ====================== PRODUCTS ====================== */
+/* ========== PRODUCTS ========== */
 const productData = {
   trackerfy: {
     title: '<span style="color:#fff;">Tracker</span><span style="color:#8DCFB0;">Fy</span>',
@@ -112,33 +114,27 @@ const productData = {
 };
 
 function showProductPage(id){
-  const page = document.getElementById('productPage');
-  const title = document.getElementById('productPageTitle');
-  const desc  = document.getElementById('productPageDescription');
-  const imgBox= document.getElementById('productImage');
   const data = productData[id];
-
-  title.innerHTML = data.title;
-  desc.innerHTML  = data.description;
-  imgBox.innerHTML = data.image
+  if(!data) return;
+  const page = document.getElementById('productPage');
+  document.getElementById('productPageTitle').innerHTML = data.title;
+  document.getElementById('productPageDescription').innerHTML  = data.description;
+  document.getElementById('productImage').innerHTML = data.image
     ? `<img src="${data.image}" alt="${data.alt}">`
     : `<span style="color:#8DCFB0;font-weight:700;">Preview coming soon</span>`;
-
   document.getElementById('etsyButton').onclick = () => openEtsy(id);
   page.classList.add('show');
 }
-function hideProductPage(){
-  document.getElementById('productPage').classList.remove('show');
-}
+function hideProductPage(){ document.getElementById('productPage').classList.remove('show'); }
 
-/* ====================== ABOUT ====================== */
+/* ========== ABOUT ========== */
 function showAboutPage(){ document.getElementById('aboutPage').classList.add('show'); }
 function hideAboutPage(){ document.getElementById('aboutPage').classList.remove('show'); }
 
-/* ====================== ETSY ====================== */
-function openEtsy(product){ window.open('https://www.etsy.com','_blank'); }
+/* ========== ETSY ========== */
+function openEtsy(){ window.open('https://www.etsy.com','_blank'); }
 
-/* ====================== EASTER EGG ====================== */
+/* ========== EASTER EGG ========== */
 function initEasterEgg(){
   let seq=[], target=['e','x','c','e','l','f','y'];
   document.addEventListener('keydown', e=>{
@@ -151,7 +147,7 @@ function initEasterEgg(){
 function openEgg(){ document.getElementById('easterEggModal').classList.add('show'); }
 function closeEasterEgg(){ document.getElementById('easterEggModal').classList.remove('show'); }
 
-/* ====================== SOFT CLICK SOUNDS ====================== */
+/* ========== SOFT CLICK SOUNDS ========== */
 let audioCtx=null;
 function ensureAudioCtx(){
   if(!audioCtx){
@@ -159,24 +155,19 @@ function ensureAudioCtx(){
     if(Ctx) audioCtx=new Ctx();
   }
 }
-function clickBeep(freq=440, dur=0.05){
+function clickBeep(freq=520, dur=0.05){
   if(!audioCtx) return;
   const osc=audioCtx.createOscillator();
   const gain=audioCtx.createGain();
-  osc.type='sine';
-  osc.frequency.value=freq;
-  gain.gain.value=0.03;                 // volumen bajo
+  osc.type='sine'; osc.frequency.value=freq;
+  gain.gain.value=0.03;
   osc.connect(gain); gain.connect(audioCtx.destination);
   const now=audioCtx.currentTime;
-  osc.start(now);
-  gain.gain.exponentialRampToValueAtTime(0.005, now+dur);
-  osc.stop(now+dur);
+  osc.start(now); gain.gain.exponentialRampToValueAtTime(0.005, now+dur); osc.stop(now+dur);
 }
-// inicializa ctx con primer interacción
 ['click','touchstart','keydown'].forEach(ev=>{
   window.addEventListener(ev, ()=>{ ensureAudioCtx(); }, { once:true, passive:true });
 });
-// disparar beep en elementos interactivos
 document.addEventListener('click', (e)=>{
   const el=e.target;
   if(el.closest('button, .product-title, .arrow-back, .folder, .pill-btn, .icon-btn')){
@@ -184,7 +175,7 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-/* ====================== INIT ====================== */
+/* ========== INIT ========== */
 document.addEventListener('DOMContentLoaded', ()=>{
   const saved=localStorage.getItem('theme');
   if(saved==='light'){ document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent='◑'; }
