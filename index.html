@@ -5,28 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>excelFy — Digital Products</title>
 
-  <!-- Fija la resolución de rutas relativas -->
+  <!-- Keep relative paths stable everywhere (Pages/Vercel/local) -->
   <base href="./">
 
-  <!-- Tailwind (CDN) -->
+  <!-- Tailwind (optional utility classes) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Fonts -->
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 
-  <!-- Styles (nota: global.css, singular) -->
-  <link rel="stylesheet" href="styles/global.css?v=3">
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/global.css?v=4">
 </head>
 <body>
   <!-- Data background -->
-  <canvas id="dataCanvas"></canvas>
+  <canvas id="dataCanvas" aria-hidden="true"></canvas>
 
-  <!-- Loading Screen -->
-  <div id="loadingScreen" class="loading-screen">
-    <div class="loading-track">
-      <img class="loading-logo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png" alt="excelFy logo"/>
+  <!-- Loader with percentage -->
+  <div id="loadingScreen" class="loading-screen" role="status" aria-live="polite">
+    <div class="loader-card glass">
+      <div class="loader-top">
+        <span class="loader-brand">excel<span>Fy</span></span>
+        <span id="loaderPct" class="loader-pct">0%</span>
+      </div>
+      <div class="loader-bar">
+        <div id="loaderProgress" class="loader-progress" style="width:0%"></div>
+      </div>
+      <p class="loading-copy">Loading a data-driven experience…</p>
     </div>
-    <div class="loading-copy">Loading a data-driven experience…</div>
   </div>
 
   <!-- Header -->
@@ -42,43 +48,40 @@
     <button class="pill-btn glass" onclick="showAboutPage()">About Us</button>
   </div>
 
-  <!-- Folder hero -->
+  <!-- Folder hero (image + logo overlay) -->
   <main class="hero" aria-label="Main">
     <div id="folderContainer" class="folder-container">
-      <div class="folder" onclick="showProducts()">
-        <div class="folder-tab"></div>
-        <div class="folder-lip"></div>
-        <div class="folder-logo">
-          <span class="in-excel">excel</span><span class="in-fy">Fy</span>
-        </div>
+      <div class="folder" onclick="showProducts()" role="button" aria-label="Open products">
+        <img class="folder-img" src="https://i.ibb.co/MytD6V85/Folder-icon.png" alt="Folder icon">
+        <img id="folderLogo" class="folder-logo-img" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png" alt="excelFy logo on folder">
       </div>
     </div>
   </main>
 
   <!-- Products -->
   <section id="productsContainer" class="products-container" aria-label="Products">
-    <div class="arrow-back" onclick="showFolder()">◀</div>
+    <div class="arrow-back" onclick="showFolder()" aria-label="Back to folder">◀</div>
 
     <h1 class="product-title" onclick="showProductPage('trackerfy')">
-      <span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
+      <span style="color:#fff;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
     </h1>
     <h1 class="product-title" onclick="showProductPage('budgetfy')">
-      <span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span>
+      <span style="color:#fff;">Budget</span><span style="color:#4FA985;">Fy</span>
     </h1>
     <h1 class="product-title" onclick="showProductPage('investfy')">
-      <span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span>
+      <span style="color:#fff;">Invest</span><span style="color:#36A96B;">Fy</span>
     </h1>
     <h1 class="product-title" onclick="showProductPage('loanfy')">
-      <span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>
+      <span style="color:#fff;">Loan</span><span style="color:#2D6B4F;">Fy</span>
     </h1>
   </section>
 
   <!-- Product detail -->
   <section id="productPage" class="product-page" aria-label="Product detail">
-    <div class="arrow-back" onclick="hideProductPage()">◀</div>
+    <div class="arrow-back" onclick="hideProductPage()" aria-label="Back to products">◀</div>
 
     <h1 id="productPageTitle" class="product-page-title">
-      <span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
+      <span style="color:#fff;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
     </h1>
 
     <div id="productImage" class="product-page-image glass">
@@ -96,7 +99,7 @@
 
   <!-- About page -->
   <section id="aboutPage" class="about-page" aria-label="About us">
-    <button class="about-close" onclick="hideAboutPage()">✕</button>
+    <button class="about-close" onclick="hideAboutPage()" aria-label="Close about">✕</button>
 
     <div class="about-content">
       <h1 class="about-title">About <span>excelFy</span></h1>
@@ -123,7 +126,7 @@
   </section>
 
   <!-- Easter egg modal -->
-  <div id="easterEggModal" class="egg-modal">
+  <div id="easterEggModal" class="egg-modal" aria-modal="true" role="dialog">
     <div class="egg-card glass">
       <h2>🎉 SECRET DISCOUNT! 🎉</h2>
       <p class="egg-sub">You found the secret code!</p>
@@ -143,6 +146,6 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="scripts/main.js?v=3" defer></script>
+  <script src="scripts/main.js?v=4" defer></script>
 </body>
 </html>
