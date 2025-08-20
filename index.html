@@ -5,165 +5,193 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>excelFy Digital Products</title>
 
-  <!-- Tailwind (igual que tu versión) -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fuente -->
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
-  <!-- Tu CSS separado -->
-  <link rel="stylesheet" href="/styles/globals.css">
+  <style>
+    /* ====== BRAND / BASE ====== */
+    @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap');
+    body{
+      font-family:'League Spartan',sans-serif; margin:0; padding:0; overflow:hidden;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+      transition:all .5s ease;
+    }
+    /* Tema claro */
+    body.light-theme{
+      background:
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+    }
+    .light-theme .products-container,
+    .light-theme .product-page,
+    .light-theme .about-page{
+      background:
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%) !important;
+    }
+    .light-theme .product-page-image{ background:#ffffff; border-color:#4FA985; }
+    .light-theme .product-page-description{ color:#2d3748; }
+    .light-theme .about-content p, .light-theme .about-content h1{ color:#2d3748 !important; }
+    .light-theme .product-title{ color:#4FA985 !important; }
+    .light-theme .product-title:hover{ color:#36A96B !important; }
+    .light-theme .arrow-back{ color:#4FA985 !important; }
+    .light-theme h1 span[style*="color: white"]{ color:#2d3748 !important; }
+
+    /* ====== CUSTOM CURSOR ====== */
+    *{ cursor:none; }
+    .custom-cursor{
+      position:fixed; width:24px; height:24px; background:transparent;
+      border:2px solid #8DCFB0; border-radius:50%; pointer-events:none; z-index:9999;
+      transition:none; box-shadow:0 0 15px rgba(141,207,176,.4);
+    }
+    .custom-cursor::before{
+      content:''; position:absolute; top:50%; left:50%; width:6px; height:6px;
+      background:#8DCFB0; border-radius:50%; transform:translate(-50%,-50%);
+    }
+    .custom-cursor.hover{ width:40px; height:40px; border-color:#4FA985; box-shadow:0 0 25px rgba(79,169,133,.6); }
+
+    /* ====== LOADING ====== */
+    .loading-screen{
+      position:fixed; inset:0;
+      background:linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      z-index:10000; transition:opacity .8s ease;
+    }
+    .loading-logo{ font-size:4rem; font-weight:900; margin-bottom:2rem; opacity:0; animation:logoAppear 2s ease forwards; }
+    .loading-bar{ width:300px; height:4px; background:rgba(141,207,176,0.2); border-radius:2px; overflow:hidden; margin-top:2rem; }
+    .loading-progress{ height:100%; background:linear-gradient(90deg, #8DCFB0, #4FA985); width:0%; animation:loadProgress 3s ease forwards; box-shadow:0 0 10px rgba(141,207,176,.5); }
+
+    /* ====== PARTICLES ====== */
+    .particles-container{ position:fixed; inset:0; pointer-events:none; z-index:1; }
+    .particle{
+      position:absolute; background:radial-gradient(circle, rgba(141,207,176,.8), rgba(79,169,133,.4));
+      border-radius:50%; animation:float 6s infinite ease-in-out;
+    }
+
+    /* ====== GLASS ====== */
+    .glass{
+      background:rgba(141,207,176,0.1);
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(141,207,176,0.2);
+      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    /* ====== BREADCRUMBS ====== */
+    .breadcrumbs{
+      position:fixed; top:80px; left:2rem; z-index:30; display:flex; align-items:center; gap:.5rem;
+      font-size:.9rem; color:#8DCFB0; opacity:0; transform:translateY(-20px); transition:all .3s ease;
+    }
+    .breadcrumbs.show{ opacity:1; transform:translateY(0); }
+    .breadcrumb-item{ transition:color .3s ease; }
+    .breadcrumb-item:hover{ color:#4FA985; }
+    .breadcrumb-separator{ color:rgba(141,207,176,0.5); }
+
+    /* ====== EASTER EGG MODAL ====== */
+    .easter-egg-modal{
+      position:fixed; inset:0; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center;
+      z-index:9999; opacity:0; pointer-events:none; transition:all .3s ease;
+    }
+    .easter-egg-modal.show{ opacity:1; pointer-events:all; }
+    .easter-egg-content{
+      background:linear-gradient(135deg, #8DCFB0, #4FA985); padding:3rem; border-radius:20px; text-align:center; color:#0f0f0f;
+      transform:scale(.8); transition:transform .3s ease; box-shadow:0 20px 60px rgba(0,0,0,.5);
+    }
+    .easter-egg-modal.show .easter-egg-content{ transform:scale(1); }
+
+    /* ====== FOLDER / VISTAS ====== */
+    .folder-container{
+      position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center;
+      transition:transform .8s cubic-bezier(.25,.46,.45,.94); z-index:10;
+    }
+    .folder-container.opened{ transform:translateX(-60vw) scale(.6); }
+    .folder{ width:60vmin; height:45vmin; cursor:pointer; transition:all .3s ease; position:relative; }
+    .folder:hover{ transform:scale(1.02); filter:drop-shadow(0 15px 25px rgba(141,207,176,.3)); }
+    .folder:active{ transform:scale(.98); }
+
+    .products-container{
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      opacity:0; pointer-events:none; transition:opacity .8s ease; z-index:5;
+    }
+    .products-container.show{ opacity:1; pointer-events:all; }
+
+    .product-title{
+      font-size:clamp(3rem, 8vw, 6rem);
+      font-weight:900; color:#8DCFB0; margin:.5rem 0; cursor:pointer;
+      transition:all .3s ease; opacity:0; transform:translateY(50px);
+    }
+    .product-title.typewriter{ animation:typewriter 1s ease forwards; }
+    .product-title:hover{ transform:scale(1.05) translateY(-10px); color:#4FA985; text-shadow:0 10px 20px rgba(141,207,176,.3); }
+
+    .product-page{
+      position:absolute; top:0; left:100vw; width:100vw; height:100vh;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      padding:2rem; transition:left .8s cubic-bezier(.25,.46,.45,.94); z-index:15;
+    }
+    .product-page.show{ left:0; }
+    .product-page-title{ font-size:clamp(4rem, 10vw, 8rem); font-weight:900; margin-bottom:1.5rem; margin-top:1rem; text-align:center; }
+    .product-page-image{
+      width:70%; max-width:400px; height:250px; background:#2a2a2a; border-radius:20px; margin:.5rem 0;
+      display:flex; align-items:center; justify-content:center; border:3px solid #8DCFB0; box-shadow:0 10px 30px rgba(0,0,0,.3); transition:all .3s ease;
+    }
+    .product-page-image:hover{ transform:scale(1.02); box-shadow:0 15px 40px rgba(141,207,176,.4); }
+    .product-page-description{ font-size:1rem; color:#ffffff; line-height:1.5; text-align:center; max-width:500px; margin-top:1rem; }
+
+    .about-page{
+      position:absolute; top:100vh; left:0; width:100vw; height:100vh;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      padding:2rem; transition:top .8s cubic-bezier(.25,.46,.45,.94); z-index:20; overflow-y:auto;
+    }
+    .about-page.show{ top:0; }
+    .about-content{ max-width:1000px; width:100%; opacity:0; transform:translateY(50px); transition:all .6s ease .3s; }
+    .about-page.show .about-content{ opacity:1; transform:translateY(0); }
+
+    /* ====== LOGO FX ====== */
+    .logo-container{ transition:all .3s ease; transform-origin:center; }
+    .logo-container:hover{ transform:scale(1.1) rotate(5deg); }
+    .logo-glow{ animation:logoGlow 2s ease-in-out infinite alternate; }
+
+    /* ====== KEYFRAMES ====== */
+    @keyframes logoAppear{ 0%{opacity:0;transform:scale(.5) rotate(-180deg)} 50%{opacity:.5;transform:scale(.8) rotate(-90deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
+    @keyframes loadProgress{ 0%{width:0%} 100%{width:100%} }
+    @keyframes float{ 0%,100%{transform:translateY(0) rotate(0)} 33%{transform:translateY(-20px) rotate(120deg)} 66%{transform:translateY(10px) rotate(240deg)} }
+    @keyframes typewriter{ 0%{opacity:0;transform:translateY(50px)} 100%{opacity:1;transform:translateY(0)} }
+    @keyframes logoGlow{ 0%{text-shadow:0 0 5px rgba(141,207,176,.5)} 100%{text-shadow:0 0 20px rgba(141,207,176,.8), 0 0 30px rgba(79,169,133,.6)} }
+    @keyframes fadeIn{ to{opacity:1} }
+    @keyframes fadeInUp{ to{opacity:1; transform:translateY(0)} }
+    @keyframes bounce{
+      0%,20%,50%,80%,100%{ transform:translateX(-50%) translateY(0) }
+      40%{ transform:translateX(-50%) translateY(-10px) }
+      60%{ transform:translateX(-50%) translateY(-5px) }
+    }
+    @keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+    .pulse-animation{ animation:pulse 2s infinite; }
+  </style>
 </head>
 <body>
-  <!-- Loading Screen -->
+  <!-- Loading -->
   <div id="loadingScreen" class="loading-screen">
     <div class="loading-logo logo-glow">
-      <span style="color: white;">excel</span><span style="color: #8DCFB0;">Fy</span>
+      <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
     </div>
-    <div class="loading-bar"><div class="loading-progress"></div></div>
-    <p style="color:#8DCFB0;margin-top:1rem;font-size:1.1rem;">Cargando experiencia increíble...</p>
-  </div>
-
-  <!-- Custom Cursor -->
-  <div class="custom-cursor" id="cursor"></div>
-
-  <!-- Particles -->
-  <div class="particles-container" id="particles"></div>
-
-  <!-- Breadcrumbs -->
-  <div id="breadcrumbs" class="breadcrumbs">
-    <span class="breadcrumb-item" onclick="goHome()">Inicio</span>
-  </div>
-
-  <!-- Easter Egg Modal -->
-  <div id="easterEggModal" class="easter-egg-modal">
-    <div class="easter-egg-content">
-      <h2 style="font-size:2.5rem;margin-bottom:1rem;font-weight:900;">🎉 ¡DESCUENTO SECRETO! 🎉</h2>
-      <p style="font-size:1.3rem;margin-bottom:1.5rem;font-weight:600;">¡Has encontrado el código secreto!</p>
-      <div style="background:rgba(0,0,0,0.2);padding:1rem;border-radius:10px;margin:1rem 0;">
-        <p style="font-size:1.1rem;margin-bottom:0.5rem;">Usa el código:</p>
-        <p style="font-size:2rem;font-weight:900;letter-spacing:3px;">EXCELFY10</p>
-      </div>
-      <p style="font-size:1rem;margin-bottom:1.5rem;">Para obtener 10% de descuento en cualquier producto</p>
-      <button onclick="closeEasterEgg()" style="padding:.8rem 2rem;background:#0f0f0f;color:#8DCFB0;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .3s;">
-        ¡Genial!
-      </button>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <div class="absolute top-0 left-0 w-full z-20 p-6">
-    <div class="text-center logo-container">
-      <h1 class="text-2xl font-bold logo-glow" id="mainLogo">
-        <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
-      </h1>
-      <p class="text-lg" style="color:#8DCFB0;">Digital Products Collection</p>
-    </div>
-
-    <!-- Theme & About -->
-    <div class="absolute top-6 right-6 flex gap-3 items-center">
-      <button id="themeToggle" onclick="toggleTheme()" class="glass" style="padding:.5rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:50%;font-size:1rem;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center"
-        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.1)'"
-        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">
-        ◐
-      </button>
-
-      <button onclick="showAboutPage()" class="glass" style="padding:.5rem 1rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:25px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
-        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.05)'"
-        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">
-        About Us
-      </button>
-    </div>
-  </div>
-
-  <!-- Carpeta principal -->
-  <div id="folderContainer" class="folder-container">
-    <div class="folder pulse-animation" onclick="showProducts()">
-      <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-        <img src="https://i.ibb.co/MytD6V85/Folder-icon.png" alt="Folder-icon" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);drop-shadow(0 8px 16px rgba(0,0,0,.3));"/>
-        <img id="folderLogo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png" style="position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);width:50%;height:auto;transition:opacity .3s;z-index:2;"/>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lista de productos -->
-  <div id="productsContainer" class="products-container">
-    <div class="arrow-back" onclick="showFolder()" style="position:absolute;right:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;opacity:0;animation:fadeIn .5s ease 1.2s forwards;font-family:Arial,sans-serif;font-weight:bold"
-      onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
-      onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
-
-    <h1 class="product-title" onclick="showProductPage('trackerfy')"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
-    <h1 class="product-title" onclick="showProductPage('budgetfy')"><span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span></h1>
-    <h1 class="product-title" onclick="showProductPage('investfy')"><span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span></h1>
-    <h1 class="product-title" onclick="showProductPage('loanfy')"><span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span></h1>
-  </div>
-
-  <!-- Detalle producto -->
-  <div id="productPage" class="product-page">
-    <div class="arrow-back" onclick="hideProductPage()" style="position:absolute;left:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold"
-      onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
-      onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
-
-    <h1 id="productPageTitle" class="product-page-title"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
-
-    <div class="product-page-image glass">
-      <span style="color:#8DCFB0;font-size:2rem;font-weight:600;">Product Image</span>
-    </div>
-
-    <div id="productPageDescription" class="product-page-description">
-      Track your daily habits and goals with customizable templates and progress charts.
-    </div>
-
-    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass" style="margin-top:1rem;padding:.7rem 1.5rem;background:#8DCFB0;color:#0f0f0f;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
-      onmouseover="this.style.background='#4FA985';this.style.transform='scale(1.05)'" onmouseout="this.style.background='#8DCFB0';this.style.transform='scale(1)'">
-      View on Etsy
-    </button>
-  </div>
-
-  <!-- About -->
-  <div id="aboutPage" class="about-page">
-    <button onclick="hideAboutPage()" style="position:absolute;left:2rem;top:2rem;cursor:pointer;font-size:2rem;color:#8DCFB0;background:none;border:none;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold;z-index:25;padding:.5rem"
-      onmouseover="this.style.color='#4FA985';this.style.transform='scale(1.2)'" onmouseout="this.style.color='#8DCFB0';this.style.transform='scale(1)'">✕</button>
-
-    <div class="about-content">
-      <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:900;margin-bottom:2rem;text-align:center;color:white;">
-        About <span style="color:#8DCFB0;">excelFy</span>
-      </h1>
-
-      <div style="max-width:600px;text-align:center;color:#ffffff;font-size:1.1rem;line-height:1.6;margin:0 auto 2rem auto;">
-        <p style="margin-bottom:1rem;">We create elegant Excel templates that help you track, manage, and achieve your goals with style and functionality.</p>
-        <p style="color:#8DCFB0;font-weight:600;">Transform your productivity with excelFy - where organization meets innovation.</p>
-      </div>
-
-      <div style="display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #8DCFB0;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
-            <span style="color:#8DCFB0;font-size:1rem;font-weight:600;">Nahuel</span>
-          </div>
-          <h3 style="color:#8DCFB0;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
-          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Technical expert</p>
-        </div>
-
-        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #4FA985;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
-            <span style="color:#4FA985;font-size:1rem;font-weight:600;">Juan</span>
-          </div>
-          <h3 style="color:#4FA985;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
-          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Creative designer</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="absolute bottom-0 left-0 w-full z-20 p-4">
-    <div class="flex justify-between items-center text-sm" style="color:#8DCFB0;">
-      <p>© 2025 excelFy. All rights reserved.</p>
-      <a href="https://www.etsy.com" target="_blank" class="hover:underline transition-all duration-300" style="color:#4FA985;">Visit our Etsy Store</a>
-    </div>
-  </div>
-
-  <!-- Tu JS separado (sin Cloudflare) -->
-  <script src="/scripts/main.js"></script>
-</body>
-</html>
+    <div class="loading-bar"><div class="loading-progress"></d
