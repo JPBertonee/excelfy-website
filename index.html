@@ -194,4 +194,303 @@
     <div class="loading-logo logo-glow">
       <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
     </div>
-    <div class="loading-bar"><div class="loading-progress"></d
+    <div class="loading-bar"><div class="loading-progress"></div></div>
+    <p style="color:#8DCFB0;margin-top:1rem;font-size:1.1rem;">Cargando experiencia increíble...</p>
+  </div>
+
+  <!-- Cursor -->
+  <div class="custom-cursor" id="cursor"></div>
+
+  <!-- Partículas -->
+  <div class="particles-container" id="particles"></div>
+
+  <!-- Breadcrumbs -->
+  <div id="breadcrumbs" class="breadcrumbs">
+    <span class="breadcrumb-item" onclick="goHome()">Inicio</span>
+  </div>
+
+  <!-- Easter Egg -->
+  <div id="easterEggModal" class="easter-egg-modal">
+    <div class="easter-egg-content">
+      <h2 style="font-size:2.5rem;margin-bottom:1rem;font-weight:900;">🎉 ¡DESCUENTO SECRETO! 🎉</h2>
+      <p style="font-size:1.3rem;margin-bottom:1.5rem;font-weight:600;">¡Has encontrado el código secreto!</p>
+      <div style="background:rgba(0,0,0,0.2);padding:1rem;border-radius:10px;margin:1rem 0;">
+        <p style="font-size:1.1rem;margin-bottom:.5rem;">Usa el código:</p>
+        <p style="font-size:2rem;font-weight:900;letter-spacing:3px;">EXCELFY10</p>
+      </div>
+      <p style="font-size:1rem;margin-bottom:1.5rem;">Para obtener 10% de descuento en cualquier producto</p>
+      <button onclick="closeEasterEgg()" style="padding:.8rem 2rem;background:#0f0f0f;color:#8DCFB0;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .3s;">
+        ¡Genial!
+      </button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="absolute top-0 left-0 w-full z-20 p-6">
+    <div class="text-center logo-container">
+      <h1 class="text-2xl font-bold logo-glow" id="mainLogo">
+        <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
+      </h1>
+      <p class="text-lg" style="color:#8DCFB0;">Digital Products Collection</p>
+    </div>
+    <div class="absolute top-6 right-6 flex gap-3 items-center">
+      <button id="themeToggle" onclick="toggleTheme()" class="glass"
+        style="padding:.5rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:50%;font-size:1rem;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center"
+        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.1)'"
+        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">◐</button>
+
+      <button onclick="showAboutPage()" class="glass"
+        style="padding:.5rem 1rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:25px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
+        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.05)'"
+        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">About Us</button>
+    </div>
+  </div>
+
+  <!-- Carpeta -->
+  <div id="folderContainer" class="folder-container">
+    <div class="folder pulse-animation" onclick="showProducts()">
+      <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+        <img src="https://i.ibb.co/MytD6V85/Folder-icon.png" alt="Folder-icon"
+             style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);drop-shadow(0 8px 16px rgba(0,0,0,0.3));"/>
+        <img id="folderLogo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png"
+             style="position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);width:50%;height:auto;transition:opacity .3s;z-index:2;"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Productos -->
+  <div id="productsContainer" class="products-container">
+    <div class="arrow-back" onclick="showFolder()"
+         style="position:absolute;right:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;opacity:0;animation:fadeIn .5s ease 1.2s forwards;font-family:Arial,sans-serif;font-weight:bold"
+         onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
+         onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
+
+    <h1 class="product-title" onclick="showProductPage('trackerfy')"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
+    <h1 class="product-title" onclick="showProductPage('budgetfy')"><span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span></h1>
+    <h1 class="product-title" onclick="showProductPage('investfy')"><span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span></h1>
+    <h1 class="product-title" onclick="showProductPage('loanfy')"><span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span></h1>
+  </div>
+
+  <!-- Detalle -->
+  <div id="productPage" class="product-page">
+    <div class="arrow-back" onclick="hideProductPage()"
+         style="position:absolute;left:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold"
+         onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
+         onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
+
+    <h1 id="productPageTitle" class="product-page-title"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
+    <div class="product-page-image glass"><span style="color:#8DCFB0;font-size:2rem;font-weight:600;">Product Image</span></div>
+    <div id="productPageDescription" class="product-page-description">Track your daily habits and goals with customizable templates and progress charts.</div>
+    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass"
+            style="margin-top:1rem;padding:.7rem 1.5rem;background:#8DCFB0;color:#0f0f0f;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
+            onmouseover="this.style.background='#4FA985';this.style.transform='scale(1.05)'"
+            onmouseout="this.style.background='#8DCFB0';this.style.transform='scale(1)'">View on Etsy</button>
+  </div>
+
+  <!-- About -->
+  <div id="aboutPage" class="about-page">
+    <button onclick="hideAboutPage()" style="position:absolute;left:2rem;top:2rem;cursor:pointer;font-size:2rem;color:#8DCFB0;background:none;border:none;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold;z-index:25;padding:.5rem"
+            onmouseover="this.style.color='#4FA985';this.style.transform='scale(1.2)'" onmouseout="this.style.color='#8DCFB0';this.style.transform='scale(1)'">✕</button>
+    <div class="about-content">
+      <h1 style="font-size:clamp(3rem, 8vw, 6rem); font-weight:900; margin-bottom:2rem; text-align:center; color:white;">
+        About <span style="color:#8DCFB0;">excelFy</span>
+      </h1>
+      <div style="max-width:600px;text-align:center;color:#ffffff;font-size:1.1rem;line-height:1.6;margin:0 auto 2rem auto;">
+        <p style="margin-bottom:1rem;">We create elegant Excel templates that help you track, manage, and achieve your goals with style and functionality.</p>
+        <p style="color:#8DCFB0;font-weight:600;">Transform your productivity with excelFy - where organization meets innovation.</p>
+      </div>
+      <div style="display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:1rem;">
+        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #8DCFB0;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
+            <span style="color:#8DCFB0;font-size:1rem;font-weight:600;">Nahuel</span>
+          </div>
+          <h3 style="color:#8DCFB0;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
+          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Technical expert</p>
+        </div>
+
+        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #4FA985;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
+            <span style="color:#4FA985;font-size:1rem;font-weight:600;">Juan</span>
+          </div>
+          <h3 style="color:#4FA985;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
+          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Creative designer</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="absolute bottom-0 left-0 w-full z-20 p-4">
+    <div class="flex justify-between items-center text-sm" style="color:#8DCFB0;">
+      <p>© 2025 excelFy. All rights reserved.</p>
+      <a href="https://www.etsy.com" target="_blank" class="hover:underline transition-all duration-300" style="color:#4FA985;">Visit our Etsy Store</a>
+    </div>
+  </div>
+
+  <script>
+    // ===== SFX
+    const playSound = (frequency, duration) => {
+      if (typeof(AudioContext)==="undefined" && typeof(webkitAudioContext)==="undefined") return;
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx(); const osc = ctx.createOscillator(); const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = frequency; osc.type = 'sine';
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+      osc.start(); osc.stop(ctx.currentTime + duration);
+    };
+
+    // ===== Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => { cursor.style.left = (e.clientX-12)+'px'; cursor.style.top = (e.clientY-12)+'px'; });
+    document.addEventListener('mouseover', e => {
+      if (e.target.tagName==='BUTTON' || e.target.onclick || e.target.style.cursor==='pointer' ||
+          e.target.classList.contains('product-title') || e.target.classList.contains('arrow-back') ||
+          e.target.classList.contains('folder')) cursor.classList.add('hover');
+    });
+    document.addEventListener('mouseout', ()=>cursor.classList.remove('hover'));
+
+    // ===== Particles
+    function createParticles(){
+      const container = document.getElementById('particles');
+      for(let i=0;i<50;i++){
+        const particle = document.createElement('div');
+        particle.className='particle';
+        const size = Math.random()*4+2;
+        particle.style.width=size+'px'; particle.style.height=size+'px';
+        particle.style.left=Math.random()*100+'%'; particle.style.top=Math.random()*100+'%';
+        particle.style.animationDelay=Math.random()*6+'s';
+        particle.style.animationDuration=(Math.random()*4+4)+'s';
+        container.appendChild(particle);
+      }
+    }
+
+    // ===== Loading
+    function hideLoadingScreen(){
+      setTimeout(()=>{
+        const loadingScreen=document.getElementById('loadingScreen');
+        loadingScreen.style.opacity='0';
+        setTimeout(()=>{ loadingScreen.style.display='none'; createParticles(); playSound(440,.2); },800);
+      },3000);
+    }
+
+    // ===== Breadcrumbs
+    function updateBreadcrumbs(path){
+      const breadcrumbs=document.getElementById('breadcrumbs');
+      breadcrumbs.innerHTML='';
+      path.forEach((item,index)=>{
+        const span=document.createElement('span');
+        span.className='breadcrumb-item'; span.textContent=item.name; span.onclick=item.action;
+        breadcrumbs.appendChild(span);
+        if(index<path.length-1){ const sep=document.createElement('span'); sep.className='breadcrumb-separator'; sep.textContent=' > '; breadcrumbs.appendChild(sep); }
+      });
+      breadcrumbs.classList.add('show');
+    }
+
+    // ===== Easter Egg
+    let easterEggSequence=[]; const easterEggCode=['e','x','c','e','l','f','y'];
+    document.addEventListener('keydown', e=>{
+      easterEggSequence.push(e.key.toLowerCase());
+      if(easterEggSequence.length>easterEggCode.length) easterEggSequence.shift();
+      if(JSON.stringify(easterEggSequence)===JSON.stringify(easterEggCode)){ showEasterEgg(); easterEggSequence=[]; }
+    });
+    function showEasterEgg(){ const modal=document.getElementById('easterEggModal'); modal.classList.add('show'); playSound(523,.3); setTimeout(()=>playSound(659,.3),200); setTimeout(()=>playSound(784,.5),400); }
+    function closeEasterEgg(){ document.getElementById('easterEggModal').classList.remove('show'); playSound(392,.2); }
+
+    // ===== Logo SFX
+    document.getElementById('mainLogo').addEventListener('mouseenter', ()=>playSound(523,.1));
+
+    // ===== Data
+    const productData={
+      'trackerfy':{ title:'<span style="color: white;">Tracker</span><span style="color: #8DCFB0;">Fy</span>', description:'Track your daily habits and goals with customizable templates and progress charts.' },
+      'budgetfy': { title:'<span style="color: white;">Budget</span><span style="color: #4FA985;">Fy</span>', description:'Manage your finances with comprehensive budgeting tools and expense tracking.' },
+      'investfy': { title:'<span style="color: white;">Invest</span><span style="color: #36A96B;">Fy</span>', description:'Plan your investment portfolio with detailed analysis and tracking tools.' },
+      'loanfy':   { title:'<span style="color: white;">Loan</span><span style="color: #2D6B4F;">Fy</span>', description:'Calculate loan payments and track your debt with comprehensive loan management.' }
+    };
+
+    // ===== Navegación
+    function goHome(){ showFolder(); updateBreadcrumbs([{name:'Inicio', action:goHome}]); }
+
+    function showProducts(){
+      document.getElementById('folderContainer').classList.add('opened');
+      document.getElementById('productsContainer').classList.add('show');
+      setTimeout(()=>{
+        document.querySelectorAll('.product-title').forEach((title, i)=>{
+          setTimeout(()=>{ title.classList.add('typewriter'); playSound(330 + (i*50), .1); }, i*200);
+        });
+      },500);
+      setTimeout(()=>{ document.getElementById('folderLogo').style.opacity='0'; },200);
+      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
+      playSound(440,.3);
+    }
+
+    function showFolder(){
+      document.getElementById('folderContainer').classList.remove('opened');
+      document.getElementById('productsContainer').classList.remove('show');
+      document.getElementById('breadcrumbs').classList.remove('show');
+      setTimeout(()=>{ document.getElementById('folderLogo').style.opacity='1'; },200);
+      playSound(330,.2);
+    }
+
+    function showProductPage(productId){
+      const page=document.getElementById('productPage');
+      document.getElementById('productPageTitle').innerHTML=productData[productId].title;
+      document.getElementById('productPageDescription').textContent=productData[productId].description;
+      document.getElementById('etsyButton').onclick=()=>openEtsy(productId);
+      page.classList.add('show');
+      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts},{name:productId.charAt(0).toUpperCase()+productId.slice(1), action:()=>showProductPage(productId)}]);
+      playSound(523,.3);
+    }
+
+    function hideProductPage(){
+      document.getElementById('productPage').classList.remove('show');
+      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
+      playSound(392,.2);
+    }
+
+    function showAboutPage(){
+      document.getElementById('aboutPage').classList.add('show');
+      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Acerca de', action:showAboutPage}]);
+      playSound(659,.3);
+    }
+    function hideAboutPage(){
+      document.getElementById('aboutPage').classList.remove('show');
+      document.getElementById('breadcrumbs').classList.remove('show');
+      playSound(392,.2);
+    }
+
+    function openEtsy(product){
+      // Reemplaza por tus URLs reales si quieres
+      window.open('https://www.etsy.com','_blank');
+      playSound(784,.2);
+    }
+
+    // Tema
+    function toggleTheme(){
+      const body=document.body, themeToggle=document.getElementById('themeToggle');
+      body.classList.toggle('light-theme');
+      if(body.classList.contains('light-theme')){ themeToggle.textContent='◑'; localStorage.setItem('theme','light'); }
+      else{ themeToggle.textContent='◐'; localStorage.setItem('theme','dark'); }
+      playSound(440,.1);
+    }
+
+    // Click SFX
+    document.addEventListener('click', e=>{
+      if (e.target.tagName==='BUTTON' || e.target.onclick || e.target.style.cursor==='pointer') playSound(523,.05);
+    });
+
+    // Init
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const savedTheme=localStorage.getItem('theme'); const themeToggle=document.getElementById('themeToggle');
+      if(savedTheme==='light'){ document.body.classList.add('light-theme'); themeToggle.textContent='◑'; }
+      hideLoadingScreen();
+    });
+
+    // Exponer funciones usadas en atributos inline (por compatibilidad)
+    window.goHome=goHome; window.showProducts=showProducts; window.showFolder=showFolder;
+    window.showProductPage=showProductPage; window.hideProductPage=hideProductPage;
+    window.showAboutPage=showAboutPage; window.hideAboutPage=hideAboutPage;
+    window.openEtsy=openEtsy; window.toggleTheme=toggleTheme; window.closeEasterEgg=closeEasterEgg;
+  </script>
+</body>
+</html>
