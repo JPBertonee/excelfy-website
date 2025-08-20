@@ -1,202 +1,163 @@
-// ===== Mini SFX (beeps)
-const playSound = (frequency, duration) => {
-  if (typeof AudioContext === 'undefined' && typeof webkitAudioContext === 'undefined') return;
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  const ctx = new Ctx();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain); gain.connect(ctx.destination);
-  osc.frequency.value = frequency; osc.type = 'sine';
-  gain.gain.setValueAtTime(0.1, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-  osc.start(); osc.stop(ctx.currentTime + duration);
-};
-
-// ===== Custom cursor
-const cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX - 12 + 'px';
-  cursor.style.top  = e.clientY - 12 + 'px';
-});
-document.addEventListener('mouseover', e => {
-  if (e.target.tagName === 'BUTTON' || e.target.onclick || e.target.style.cursor === 'pointer' ||
-      e.target.classList.contains('product-title') || e.target.classList.contains('arrow-back') ||
-      e.target.classList.contains('folder')) cursor.classList.add('hover');
-});
-document.addEventListener('mouseout', () => cursor.classList.remove('hover'));
-
-// ===== Particles
-function createParticles() {
-  const container = document.getElementById('particles');
-  for (let i = 0; i < 50; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random() * 4 + 2;
-    p.style.width = size + 'px';
-    p.style.height = size + 'px';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.top = Math.random() * 100 + '%';
-    p.style.animationDelay = Math.random() * 6 + 's';
-    p.style.animationDuration = (Math.random() * 4 + 4) + 's';
-    container.appendChild(p);
-  }
+/* ===== THEME ===== */
+function toggleTheme(){
+  const b=document.body, btn=document.getElementById('themeToggle');
+  b.classList.toggle('light-theme');
+  const light=b.classList.contains('light-theme');
+  btn.textContent= light ? '◑' : '◐';
+  localStorage.setItem('theme', light ? 'light' : 'dark');
 }
 
-// ===== Loading screen
-function hideLoadingScreen() {
-  setTimeout(() => {
-    const loading = document.getElementById('loadingScreen');
-    loading.style.opacity = '0';
-    setTimeout(() => { loading.style.display = 'none'; createParticles(); playSound(440, 0.2); }, 800);
-  }, 3000);
+/* ===== LOADER ===== */
+function startLoader(){
+  setTimeout(()=>{
+    const ls=document.getElementById('loadingScreen');
+    ls.style.opacity='0';
+    setTimeout(()=> ls.style.display='none', 700);
+  }, 2600);
 }
 
-// ===== Breadcrumbs
-function updateBreadcrumbs(path) {
-  const bc = document.getElementById('breadcrumbs');
-  bc.innerHTML = '';
-  path.forEach((item, i) => {
-    const span = document.createElement('span');
-    span.className = 'breadcrumb-item';
-    span.textContent = item.name;
-    span.onclick = item.action;
-    bc.appendChild(span);
-    if (i < path.length - 1) {
-      const sep = document.createElement('span');
-      sep.className = 'breadcrumb-separator';
-      sep.textContent = ' > ';
-      bc.appendChild(sep);
+/* ===== DATA CANVAS (letters & numbers with cursor repulsion) ===== */
+let dc, ctx, W, H, points=[], mouse={x:-9999,y:-9999};
+const GLYPHS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+function initDataCanvas(){
+  dc=document.getElementById('dataCanvas');
+  ctx=dc.getContext('2d');
+  resizeDataCanvas();
+  window.addEventListener('resize', resizeDataCanvas);
+  window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+  window.addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
+  requestAnimationFrame(tick);
+}
+function resizeDataCanvas(){
+  W = dc.width = window.innerWidth;
+  H = dc.height = window.innerHeight;
+  const count = Math.min(220, Math.floor((W*H)/24000));
+  points = Array.from({length:count}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx:(Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25,
+    ch: GLYPHS[Math.floor(Math.random()*GLYPHS.length)],
+    size: 10 + Math.random()*14,
+    a: .35 + Math.random()*.5
+  }));
+}
+function tick(){
+  ctx.clearRect(0,0,W,H);
+  const isLight=document.body.classList.contains('light-theme');
+  const fill = isLight ? "rgba(35,51,43,0.75)" : "#8DCFB0";
+  for(const p of points){
+    const dx = p.x - mouse.x, dy = p.y - mouse.y;
+    const dist = Math.hypot(dx, dy), radius = 120;
+    if(dist < radius){
+      const f = (radius - dist)/radius;
+      const ang = Math.atan2(dy, dx);
+      p.vx += Math.cos(ang) * f * 1.0;
+      p.vy += Math.sin(ang) * f * 1.0;
     }
-  });
-  bc.classList.add('show');
-}
+    p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy *= .985;
+    if(p.x < -30) p.x = W+30; if(p.x > W+30) p.x = -30;
+    if(p.y < -30) p.y = H+30; if(p.y > H+30) p.y = -30;
 
-// ===== Easter egg
-let easterEggSequence = [];
-const easterEggCode = ['e','x','c','e','l','f','y'];
-document.addEventListener('keydown', e => {
-  easterEggSequence.push(e.key.toLowerCase());
-  if (easterEggSequence.length > easterEggCode.length) easterEggSequence.shift();
-  if (JSON.stringify(easterEggSequence) === JSON.stringify(easterEggCode)) {
-    showEasterEgg(); easterEggSequence = [];
+    ctx.globalAlpha = p.a;
+    ctx.fillStyle = fill;
+    ctx.font = `${p.size}px "League Spartan", system-ui, Arial, sans-serif`;
+    ctx.fillText(p.ch, p.x, p.y);
   }
-});
-function showEasterEgg() {
-  const m = document.getElementById('easterEggModal');
-  m.classList.add('show');
-  playSound(523, .3); setTimeout(()=>playSound(659,.3),200); setTimeout(()=>playSound(784,.5),400);
-}
-function closeEasterEgg() {
-  document.getElementById('easterEggModal').classList.remove('show');
-  playSound(392, .2);
+  requestAnimationFrame(tick);
 }
 
-// ===== Logo SFX
-document.getElementById('mainLogo').addEventListener('mouseenter', ()=>playSound(523, .1));
-
-// ===== Datos productos
-const productData = {
-  trackerfy: { title: '<span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>', description:'Track your daily habits and goals with customizable templates and progress charts.' },
-  budgetfy:  { title: '<span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span>',  description:'Manage your finances with comprehensive budgeting tools and expense tracking.' },
-  investfy:  { title: '<span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span>',  description:'Plan your investment portfolio with detailed analysis and tracking tools.' },
-  loanfy:    { title: '<span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>',    description:'Calculate loan payments and track your debt with comprehensive loan management.' }
-};
-
-// ===== Navegación
-function goHome(){ showFolder(); updateBreadcrumbs([{name:'Inicio', action:goHome}]); }
-
+/* ===== NAV (folder -> list) ===== */
 function showProducts(){
   document.getElementById('folderContainer').classList.add('opened');
   document.getElementById('productsContainer').classList.add('show');
-
-  // efecto typewriter + sonido
-  setTimeout(()=>{
-    const titles = document.querySelectorAll('.product-title');
-    titles.forEach((t,i)=> setTimeout(()=>{ t.classList.add('typewriter'); playSound(330 + i*50, .1); }, i*200));
-  }, 500);
-
-  setTimeout(()=> document.getElementById('folderLogo').style.opacity = '0', 200);
-
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
-  playSound(440,.3);
 }
-
 function showFolder(){
   document.getElementById('folderContainer').classList.remove('opened');
   document.getElementById('productsContainer').classList.remove('show');
-  document.getElementById('breadcrumbs').classList.remove('show');
-  setTimeout(()=> document.getElementById('folderLogo').style.opacity = '1', 200);
-  playSound(330,.2);
 }
 
-function showProductPage(productId){
+/* ===== PRODUCT DATA ===== */
+const productData = {
+  trackerfy: {
+    title: '<span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>',
+    description: 'Track daily habits and goals with customizable templates and clean progress charts.',
+    image: 'https://i.ibb.co/DPM7ZYJM/Tracker-Fy.png',
+    alt: 'TrackerFy'
+  },
+  budgetfy: {
+    title: '<span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span>',
+    description: 'Manage your personal or business finances with a friendly budgeting toolkit.',
+    image: '', alt: 'BudgetFy'
+  },
+  investfy: {
+    title: '<span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span>',
+    description: 'Plan and follow your portfolio with allocations, performance, and rebalancing helpers.',
+    image: 'https://i.ibb.co/7xvjhYzg/InvestFy.png',
+    alt: 'InvestFy'
+  },
+  loanfy: {
+    title: '<span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>',
+    description: 'Calculate payments and track your debt with smart amortization views. <strong>Free template</strong> — download it via our Instagram.',
+    image: 'https://i.ibb.co/ZR68WtPR/LoanFy.png',
+    alt: 'LoanFy'
+  }
+};
+
+function showProductPage(id){
   const page = document.getElementById('productPage');
   const title = document.getElementById('productPageTitle');
   const desc  = document.getElementById('productPageDescription');
-  const btn   = document.getElementById('etsyButton');
+  const imgBox= document.getElementById('productImage');
+  const data = productData[id];
 
-  title.innerHTML = productData[productId].title;
-  desc.textContent = productData[productId].description;
-  btn.onclick = ()=>openEtsy(productId);
+  title.innerHTML = data.title;
+  desc.innerHTML  = data.description;
+  imgBox.innerHTML = data.image
+    ? `<img src="${data.image}" alt="${data.alt}">`
+    : `<span style="color:#8DCFB0;font-weight:700;">Preview coming soon</span>`;
 
+  document.getElementById('etsyButton').onclick = () => openEtsy(id);
   page.classList.add('show');
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts},{name:productId.charAt(0).toUpperCase()+productId.slice(1), action:()=>showProductPage(productId)}]);
-  playSound(523,.3);
 }
-
 function hideProductPage(){
   document.getElementById('productPage').classList.remove('show');
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
-  playSound(392,.2);
 }
 
-function showAboutPage(){
-  document.getElementById('aboutPage').classList.add('show');
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Acerca de', action:showAboutPage}]);
-  playSound(659,.3);
-}
-function hideAboutPage(){
-  document.getElementById('aboutPage').classList.remove('show');
-  document.getElementById('breadcrumbs').classList.remove('show');
-  playSound(392,.2);
-}
+/* ===== ABOUT ===== */
+function showAboutPage(){ document.getElementById('aboutPage').classList.add('show'); }
+function hideAboutPage(){ document.getElementById('aboutPage').classList.remove('show'); }
 
-function openEtsy(product){
-  // reemplaza con tus URLs reales si quieres
-  window.open('https://www.etsy.com','_blank');
-  playSound(784,.2);
+/* ===== ETSY ===== */
+function openEtsy(product){ window.open('https://www.etsy.com','_blank'); }
+
+/* ===== EASTER EGG ===== */
+function initEasterEgg(){
+  let seq=[], target=['e','x','c','e','l','f','y'];
+  document.addEventListener('keydown', e=>{
+    seq.push(e.key.toLowerCase());
+    if(seq.length>target.length) seq.shift();
+    if(JSON.stringify(seq)===JSON.stringify(target)) openEgg();
+  });
+  document.getElementById('eggClose').addEventListener('click', closeEasterEgg);
 }
+function openEgg(){ document.getElementById('easterEggModal').classList.add('show'); }
+function closeEasterEgg(){ document.getElementById('easterEggModal').classList.remove('show'); }
 
-// Tema
-function toggleTheme(){
-  const body = document.body, btn = document.getElementById('themeToggle');
-  body.classList.toggle('light-theme');
-  if (body.classList.contains('light-theme')){ btn.textContent='◑'; localStorage.setItem('theme','light'); }
-  else { btn.textContent='◐'; localStorage.setItem('theme','dark'); }
-  playSound(440,.1);
-}
-
-// Sonidito en clicks
-document.addEventListener('click', e => {
-  if (e.target.tagName === 'BUTTON' || e.target.onclick || e.target.style.cursor === 'pointer') playSound(523,.05);
-});
-
-// Init
+/* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded', ()=>{
-  const saved = localStorage.getItem('theme');
-  const btn = document.getElementById('themeToggle');
-  if (saved==='light'){ document.body.classList.add('light-theme'); btn.textContent='◑'; }
-  hideLoadingScreen();
+  const saved=localStorage.getItem('theme');
+  if(saved==='light'){ document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent='◑'; }
+  startLoader();
+  initDataCanvas();
+  initEasterEgg();
 });
 
-// Exponer funciones globales usadas por atributos HTML
-window.goHome = goHome;
-window.showProducts = showProducts;
-window.showFolder = showFolder;
-window.showProductPage = showProductPage;
-window.hideProductPage = hideProductPage;
-window.showAboutPage = showAboutPage;
-window.hideAboutPage = hideAboutPage;
-window.openEtsy = openEtsy;
-window.toggleTheme = toggleTheme;
-window.closeEasterEgg = closeEasterEgg;
+/* Expose (for inline onclicks in HTML) */
+window.toggleTheme=toggleTheme;
+window.showProducts=showProducts;
+window.showFolder=showFolder;
+window.showProductPage=showProductPage;
+window.hideProductPage=hideProductPage;
+window.showAboutPage=showAboutPage;
+window.hideAboutPage=hideAboutPage;
+window.openEtsy=openEtsy;

@@ -11,175 +11,8 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 
-  <style>
-    :root{
-      --mint:#8DCFB0; --mint-2:#4FA985;
-      --bg-0:#0f0f0f; --bg-1:#1a1a1a; --ink:#eaf4ef;
-      --ink-dark:#1f2937; /* light theme text */
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:'League Spartan',system-ui,Arial,sans-serif; overflow:hidden; color:var(--ink);
-      background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,.10) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,.10) 0%, transparent 50%),
-        linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, #0a0a0a 100%);
-      transition:background .5s ease, color .5s ease;
-    }
-
-    /* ===== Light theme – improved contrast ===== */
-    body.light-theme{
-      color:var(--ink-dark);
-      background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,.12), transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,.12), transparent 50%),
-        linear-gradient(135deg,#f5f7f7 0%,#eef2f2 50%,#e6ecec 100%);
-    }
-    .light-theme .glass{
-      background:rgba(141,207,176,.10);
-      border:1.5px solid rgba(79,169,133,.35);
-      color:#23332b !important;
-      box-shadow:0 6px 22px rgba(0,0,0,.15);
-    }
-    .light-theme .product-page-image{ background:#ffffff; border-color:#4FA985; }
-    .light-theme .product-page-description{ color:#2b2b2b; }
-    .light-theme h1 span[style*="color: white"]{ color:#2b2b2b !important; }
-
-    /* ===== Glass style ===== */
-    .glass{
-      background:rgba(141,207,176,.12);
-      backdrop-filter:blur(10px);
-      border:1px solid rgba(141,207,176,.28);
-      box-shadow:0 8px 32px rgba(0,0,0,.32);
-    }
-
-    /* ===== Header ===== */
-    .site-header{ position:fixed; top:22px; left:50%; transform:translateX(-50%); text-align:center; z-index:20; }
-    .brand{ margin:0; font-weight:900; letter-spacing:.3px; font-size:28px; }
-    .brand .excel{ color:#fff; }
-    .brand .fy{ color:var(--mint); }
-    .tagline{ margin:.25rem 0 0; color:var(--mint); font-weight:600; font-size:14px; }
-    .tip{ margin-top:.25rem; font-size:12px; color:#93e0bf; opacity:.9; }
-
-    .top-actions{ position:fixed; top:18px; right:18px; display:flex; gap:12px; z-index:20; }
-    .icon-btn{
-      width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
-      border:2px solid rgba(141,207,176,.6); color:var(--mint); background:rgba(141,207,176,.08);
-    }
-    .pill-btn{
-      display:inline-flex;align-items:center;padding:.5rem 1rem;border-radius:999px;cursor:pointer;
-      border:2px solid rgba(141,207,176,.6); color:var(--mint); background:rgba(141,207,176,.08);
-      text-decoration:none; font-weight:700;
-    }
-
-    /* ===== Data canvas (background) ===== */
-    #dataCanvas{ position:fixed; inset:0; z-index:0; }
-
-    /* ===== Loading screen with sliding logo ===== */
-    .loading-screen{
-      position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-      background:linear-gradient(135deg,#0f1010,#161919 60%,#0d0f0f); z-index:10000; transition:opacity .7s ease;
-    }
-    .loading-track{
-      position:relative; width:min(70vw,420px); height:56px; border-radius:999px; overflow:hidden;
-      border:1.5px solid rgba(141,207,176,.35); background:rgba(141,207,176,.08);
-      box-shadow:0 12px 40px rgba(0,0,0,.45), 0 0 0 2px rgba(141,207,176,.12) inset;
-      margin-top:1rem;
-    }
-    .loading-logo{
-      position:absolute; top:50%; transform:translateY(-50%); left:-40%;
-      height:40px; filter:drop-shadow(0 4px 12px rgba(141,207,176,.4));
-      animation:slide-logo 2.6s ease-in-out infinite;
-    }
-    @keyframes slide-logo{
-      0%{ left:-40%; opacity:.8 }
-      80%{ left:100%; opacity:1 }
-      100%{ left:100%; opacity:1 }
-    }
-    .loading-copy{ color:var(--mint); font-size:1rem; margin-top:1rem; }
-
-    /* ===== Folder / hero ===== */
-    .hero{ position:fixed; inset:0; display:grid; place-items:center; z-index:10; }
-    .folder{
-      position:relative; width:min(64vw,560px); height:min(48vw,420px); background:#fff; border-radius:26px;
-      /* Glow/Sombra alrededor */
-      box-shadow:0 32px 64px rgba(0,0,0,.45), 0 0 0 2px rgba(255,255,255,.06) inset,
-                 0 0 36px rgba(141,207,176,.28), 0 0 72px rgba(79,169,133,.18);
-      transition:transform .25s ease, box-shadow .25s ease;
-      cursor:pointer;
-    }
-    .folder:hover{ transform:translateY(-2px); box-shadow:0 38px 72px rgba(0,0,0,.5), 0 0 48px rgba(141,207,176,.34); }
-    .folder-tab{ position:absolute; left:13%; top:-54px; width:58%; height:82px; background:#fff; border-top-left-radius:24px; border-top-right-radius:18px; box-shadow:0 18px 30px rgba(0,0,0,.25); }
-    .folder-lip{ position:absolute; left:14%; top:68px; width:72%; height:16px; background:#111; border-radius:12px; filter:blur(.2px); }
-    .folder-logo{ position:absolute; inset:0; display:grid; place-items:center; font-weight:900; font-size: clamp(40px,7vw,76px); }
-    .folder-logo .in-excel{ color:#0f0f0f; }
-    .folder-logo .in-fy{ color:var(--mint-2); }
-
-    /* Transition to products */
-    .folder-container{ position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; transition:transform .7s cubic-bezier(.25,.46,.45,.94); z-index:10; }
-    .folder-container.opened{ transform:translateX(-60vw) scale(.6); }
-
-    /* Products list */
-    .products-container{
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,.10), transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,.10), transparent 50%),
-        linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0a0a0a 100%);
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      opacity:0; pointer-events:none; transition:opacity .6s ease; z-index:5;
-    }
-    .products-container.show{ opacity:1; pointer-events:auto; }
-    .product-title{
-      font-size:clamp(3rem,8vw,6rem); font-weight:900; color:var(--mint); margin:.5rem 0; opacity:0; transform:translateY(12px);
-    }
-    /* Fade rápido y todos juntos */
-    .products-container.show .product-title{ animation:fadeInUp .35s ease forwards; }
-    @keyframes fadeInUp{ to{ opacity:1; transform:translateY(0) } }
-
-    /* Product page */
-    .product-page{
-      position:absolute; top:0; left:100vw; width:100vw; height:100vh;
-      background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,.10), transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,.10), transparent 50%),
-        linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0a0a0a 100%);
-      display:flex; flex-direction:column; justify-content:center; align-items:center; padding:2rem;
-      transition:left .7s cubic-bezier(.25,.46,.45,.94); z-index:15;
-    }
-    .product-page.show{ left:0; }
-    .product-page-title{ font-size:clamp(4rem,10vw,8rem); font-weight:900; margin:1rem 0 1.2rem; text-align:center; }
-    .product-page-image{
-      width:72%; max-width:520px; min-height:260px; background:#222; border-radius:20px; margin:.5rem 0;
-      display:flex; align-items:center; justify-content:center; border:3px solid var(--mint); box-shadow:0 10px 30px rgba(0,0,0,.35);
-      overflow:hidden;
-    }
-    .product-page-image img{ width:100%; height:auto; display:block; }
-
-    .product-page-description{ font-size:1rem; color:#ffffff; line-height:1.55; text-align:center; max-width:640px; margin-top:1rem; }
-
-    /* About page */
-    .about-page{
-      position:absolute; top:100vh; left:0; width:100vw; height:100vh;
-      background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,.15), transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,.15), transparent 50%),
-        linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0a0a0a 100%);
-      display:flex; flex-direction:column; justify-content:center; align-items:center; padding:2rem;
-      transition:top .7s cubic-bezier(.25,.46,.45,.94); z-index:20; overflow-y:auto;
-    }
-    .about-page.show{ top:0; }
-    .about-content{ max-width:1000px; width:100%; opacity:0; transform:translateY(40px); transition:all .5s ease .2s; }
-    .about-page.show .about-content{ opacity:1; transform:translateY(0); }
-
-    /* Footer */
-    .site-footer{
-      position:fixed; bottom:14px; left:0; right:0; padding:0 18px; z-index:20;
-      display:flex; align-items:center; justify-content:space-between; font-size:14px; color:var(--mint);
-    }
-    .site-footer a{ color:var(--mint-2); text-decoration:none; font-weight:700; }
-    .site-footer a:hover{ text-decoration:underline; }
-  </style>
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/globals.css">
 </head>
 <body>
   <!-- Data background -->
@@ -221,71 +54,82 @@
 
   <!-- Products -->
   <section id="productsContainer" class="products-container" aria-label="Products">
-    <div class="arrow-back" onclick="showFolder()" style="position:absolute;right:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;font-weight:bold">◀</div>
-    <h1 class="product-title" onclick="showProductPage('trackerfy')"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
-    <h1 class="product-title" onclick="showProductPage('budgetfy')"><span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span></h1>
-    <h1 class="product-title" onclick="showProductPage('investfy')"><span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span></h1>
-    <h1 class="product-title" onclick="showProductPage('loanfy')"><span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span></h1>
+    <div class="arrow-back" onclick="showFolder()">◀</div>
+
+    <h1 class="product-title" onclick="showProductPage('trackerfy')">
+      <span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
+    </h1>
+    <h1 class="product-title" onclick="showProductPage('budgetfy')">
+      <span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span>
+    </h1>
+    <h1 class="product-title" onclick="showProductPage('investfy')">
+      <span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span>
+    </h1>
+    <h1 class="product-title" onclick="showProductPage('loanfy')">
+      <span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>
+    </h1>
   </section>
 
   <!-- Product detail -->
   <section id="productPage" class="product-page" aria-label="Product detail">
-    <div class="arrow-back" onclick="hideProductPage()" style="position:absolute;left:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;font-weight:bold">◀</div>
-    <h1 id="productPageTitle" class="product-page-title"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
+    <div class="arrow-back" onclick="hideProductPage()">◀</div>
+
+    <h1 id="productPageTitle" class="product-page-title">
+      <span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
+    </h1>
+
     <div id="productImage" class="product-page-image glass">
       <span style="color:#8DCFB0;font-size:1.6rem;font-weight:700;">Product image</span>
     </div>
+
     <div id="productPageDescription" class="product-page-description">
       Track your daily habits and goals with customizable templates and progress charts.
     </div>
-    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass" style="margin-top:1rem;padding:.7rem 1.5rem;background:#8DCFB0;color:#0f0f0f;border:none;border-radius:10px;font-size:1rem;font-weight:800;cursor:pointer">
+
+    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass product-cta">
       View on Etsy
     </button>
   </section>
 
   <!-- About page -->
   <section id="aboutPage" class="about-page" aria-label="About us">
-    <button onclick="hideAboutPage()" style="position:absolute;left:2rem;top:2rem;cursor:pointer;font-size:2rem;color:#8DCFB0;background:none;border:none;font-weight:bold">✕</button>
+    <button class="about-close" onclick="hideAboutPage()">✕</button>
+
     <div class="about-content">
-      <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:900;margin-bottom:2rem;text-align:center;color:white;">
-        About <span style="color:#8DCFB0;">excelFy</span>
-      </h1>
-      <div style="max-width:640px;text-align:center;color:#ffffff;font-size:1.1rem;line-height:1.6;margin:0 auto 2rem;">
-        <p style="margin-bottom:1rem;">We craft elegant, functional templates for Excel and Google Sheets to help you track, manage and visualize your data.</p>
-        <p style="color:#8DCFB0;font-weight:700;">Boost your productivity with excelFy — where organization meets insight.</p>
+      <h1 class="about-title">About <span>excelFy</span></h1>
+
+      <div class="about-text">
+        <p>We craft elegant, functional templates for Excel and Google Sheets to help you track, manage and visualize your data.</p>
+        <p class="about-highlight">Boost your productivity with excelFy — where organization meets insight.</p>
       </div>
-      <div style="display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-        <div class="glass" style="text-align:center;padding:1.5rem;border-radius:15px;">
-          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #8DCFB0;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;box-shadow:0 8px 20px rgba(0,0,0,.3);">
-            <span style="color:#8DCFB0;font-weight:700;">Nahuel</span>
-          </div>
-          <h3 style="color:#8DCFB0;margin:.2rem 0;">Co-Founder</h3>
-          <p style="color:#ffffff;font-size:.95rem;max-width:160px;margin:0 auto;">Technical expert</p>
+
+      <div class="about-team">
+        <div class="about-card glass">
+          <div class="avatar mint"><span>Nahuel</span></div>
+          <h3 class="role mint">Co-Founder</h3>
+          <p class="bio">Technical expert</p>
         </div>
-        <div class="glass" style="text-align:center;padding:1.5rem;border-radius:15px;">
-          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #4FA985;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;box-shadow:0 8px 20px rgba(0,0,0,.3);">
-            <span style="color:#4FA985;font-weight:700;">Juan</span>
-          </div>
-          <h3 style="color:#4FA985;margin:.2rem 0;">Co-Founder</h3>
-          <p style="color:#ffffff;font-size:.95rem;max-width:160px;margin:0 auto;">Creative designer</p>
+
+        <div class="about-card glass">
+          <div class="avatar green"><span>Juan</span></div>
+          <h3 class="role green">Co-Founder</h3>
+          <p class="bio">Creative designer</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Easter egg (EN) -->
-  <div id="easterEggModal" class="about-page" style="background:rgba(0,0,0,.8); z-index:9999; top:100vh;">
-    <div class="about-content" style="max-width:560px;">
-      <div class="glass" style="padding:2rem;border-radius:20px;text-align:center;background:linear-gradient(135deg,#8DCFB0,#4FA985);color:#0f0f0f;">
-        <h2 style="font-size:2.2rem; margin:0 0 1rem; font-weight:900;">🎉 SECRET DISCOUNT! 🎉</h2>
-        <p style="font-size:1.15rem; margin:.2rem 0 1.2rem; font-weight:700;">You found the secret code!</p>
-        <div style="background:rgba(0,0,0,.18); padding:1rem; border-radius:10px; margin:1rem 0;">
-          <p style="margin:0 0 .5rem;">Use this code:</p>
-          <p style="font-size:2rem; font-weight:900; letter-spacing:3px; margin:0;">EXCELFY10</p>
-        </div>
-        <p style="margin:.5rem 0 1.2rem;">Get <strong>10% off</strong> any product</p>
-        <button onclick="closeEasterEgg()" class="glass" style="padding:.8rem 2rem; background:#0f0f0f; color:#8DCFB0; border:none; border-radius:10px; font-weight:800; cursor:pointer;">Awesome!</button>
+  <!-- Easter egg modal -->
+  <div id="easterEggModal" class="egg-modal">
+    <div class="egg-card glass">
+      <h2>🎉 SECRET DISCOUNT! 🎉</h2>
+      <p class="egg-sub">You found the secret code!</p>
+      <div class="egg-code">
+        <p>Use this code:</p>
+        <p class="code">EXCELFY10</p>
       </div>
+      <p>Get <strong>10% off</strong> any product</p>
+      <button id="eggClose" class="egg-btn">Awesome!</button>
     </div>
   </div>
 
@@ -295,178 +139,7 @@
     <a href="https://www.etsy.com" target="_blank" rel="noopener">Visit our Etsy Store</a>
   </footer>
 
-  <script>
-    /* ========= THEME ========= */
-    function toggleTheme(){
-      const b=document.body, btn=document.getElementById('themeToggle');
-      b.classList.toggle('light-theme');
-      const light=b.classList.contains('light-theme');
-      btn.textContent= light ? '◑' : '◐';
-      localStorage.setItem('theme', light ? 'light' : 'dark');
-    }
-    document.addEventListener('DOMContentLoaded',()=>{
-      const saved=localStorage.getItem('theme');
-      if(saved==='light'){ document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent='◑'; }
-      startLoader();
-      initDataCanvas();
-      initEasterEgg();
-    });
-
-    /* ========= LOADER ========= */
-    function startLoader(){
-      setTimeout(()=>{
-        const ls=document.getElementById('loadingScreen');
-        ls.style.opacity='0';
-        setTimeout(()=> ls.style.display='none', 700);
-      }, 2600);
-    }
-
-    /* ========= DATA CANVAS (letters & numbers that repel cursor) ========= */
-    let dc, ctx, W, H, points=[], mouse={x:-9999,y:-9999};
-    const GLYPHS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    function initDataCanvas(){
-      dc=document.getElementById('dataCanvas'); ctx=dc.getContext('2d');
-      resizeDataCanvas(); window.addEventListener('resize', resizeDataCanvas);
-      window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
-      window.addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
-      requestAnimationFrame(tick);
-    }
-    function resizeDataCanvas(){
-      W = dc.width = window.innerWidth;
-      H = dc.height = window.innerHeight;
-      const count = Math.min(220, Math.floor((W*H)/24000));  // densidad
-      points = Array.from({length:count}, () => ({
-        x: Math.random()*W, y: Math.random()*H,
-        vx:(Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25,
-        ch: GLYPHS[Math.floor(Math.random()*GLYPHS.length)],
-        size: 10 + Math.random()*14,
-        a: .35 + Math.random()*.5
-      }));
-    }
-    function tick(){
-      ctx.clearRect(0,0,W,H);
-      const isLight=document.body.classList.contains('light-theme');
-      const fill = isLight ? "rgba(35,51,43,0.75)" : "#8DCFB0";
-      for(const p of points){
-        // repulsión con el cursor
-        const dx = p.x - mouse.x, dy = p.y - mouse.y;
-        const dist = Math.hypot(dx, dy), radius = 120;
-        if(dist < radius){
-          const f = (radius - dist)/radius;
-          const ang = Math.atan2(dy, dx);
-          p.vx += Math.cos(ang) * f * 1.0;
-          p.vy += Math.sin(ang) * f * 1.0;
-        }
-        // movimiento + fricción
-        p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy *= .985;
-
-        // wrap
-        if(p.x < -30) p.x = W+30; if(p.x > W+30) p.x = -30;
-        if(p.y < -30) p.y = H+30; if(p.y > H+30) p.y = -30;
-
-        ctx.globalAlpha = p.a;
-        ctx.fillStyle = fill;
-        ctx.font = `${p.size}px "League Spartan", system-ui, Arial, sans-serif`;
-        ctx.fillText(p.ch, p.x, p.y);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    /* ========= NAVIGATION (folder -> list -> product) ========= */
-    function showProducts(){
-      document.getElementById('folderContainer').classList.add('opened');
-      document.getElementById('productsContainer').classList.add('show');
-    }
-    function showFolder(){
-      document.getElementById('folderContainer').classList.remove('opened');
-      document.getElementById('productsContainer').classList.remove('show');
-    }
-
-    /* ========= PRODUCT DATA ========= */
-    const productData = {
-      trackerfy: {
-        title: '<span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>',
-        description: 'Track daily habits and goals with customizable templates and clean progress charts.',
-        image: 'https://i.ibb.co/DPM7ZYJM/Tracker-Fy.png',
-        alt: 'TrackerFy'
-      },
-      budgetfy: {
-        title: '<span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span>',
-        description: 'Manage your personal or business finances with a friendly budgeting toolkit.',
-        image: '', alt: 'BudgetFy'
-      },
-      investfy: {
-        title: '<span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span>',
-        description: 'Plan and follow your portfolio with allocations, performance, and rebalancing helpers.',
-        image: 'https://i.ibb.co/7xvjhYzg/InvestFy.png',
-        alt: 'InvestFy'
-      },
-      loanfy: {
-        title: '<span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>',
-        description: 'Calculate payments and track your debt with smart amortization views. <strong>Free template</strong> — download it via our Instagram.',
-        image: 'https://i.ibb.co/ZR68WtPR/LoanFy.png',
-        alt: 'LoanFy'
-      }
-    };
-
-    function showProductPage(id){
-      const page = document.getElementById('productPage');
-      const title = document.getElementById('productPageTitle');
-      const desc  = document.getElementById('productPageDescription');
-      const imgBox= document.getElementById('productImage');
-      const data = productData[id];
-
-      title.innerHTML = data.title;
-      desc.innerHTML  = data.description;
-      imgBox.innerHTML = data.image
-        ? `<img src="${data.image}" alt="${data.alt}">`
-        : `<span style="color:#8DCFB0;font-weight:700;">Preview coming soon</span>`;
-
-      document.getElementById('etsyButton').onclick = () => openEtsy(id);
-      page.classList.add('show');
-    }
-    function hideProductPage(){
-      document.getElementById('productPage').classList.remove('show');
-    }
-
-    function showAboutPage(){ document.getElementById('aboutPage').classList.add('show'); }
-    function hideAboutPage(){ document.getElementById('aboutPage').classList.remove('show'); }
-
-    function openEtsy(product){
-      // Replace with your real product URLs if needed
-      window.open('https://www.etsy.com', '_blank');
-    }
-
-    /* ========= EASTER EGG ========= */
-    function initEasterEgg(){
-      let seq=[], target=['e','x','c','e','l','f','y'];
-      document.addEventListener('keydown', e=>{
-        seq.push(e.key.toLowerCase());
-        if(seq.length>target.length) seq.shift();
-        if(JSON.stringify(seq)===JSON.stringify(target)) openEgg();
-      });
-    }
-    function openEgg(){
-      const m=document.getElementById('easterEggModal');
-      m.style.top='0';
-      setTimeout(()=>{ m.classList.add('show'); }, 10);
-    }
-    function closeEasterEgg(){
-      const m=document.getElementById('easterEggModal');
-      m.classList.remove('show');
-      setTimeout(()=>{ m.style.top='100vh'; }, 400);
-    }
-
-    /* ========= Expose for inline handlers ========= */
-    window.toggleTheme=toggleTheme;
-    window.showProducts=showProducts;
-    window.showFolder=showFolder;
-    window.showProductPage=showProductPage;
-    window.hideProductPage=hideProductPage;
-    window.showAboutPage=showAboutPage;
-    window.hideAboutPage=hideAboutPage;
-    window.closeEasterEgg=closeEasterEgg;
-    window.openEtsy=openEtsy;
-  </script>
+  <!-- Scripts -->
+  <script src="scripts/main.js" defer></script>
 </body>
 </html>
