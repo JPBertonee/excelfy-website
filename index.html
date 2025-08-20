@@ -5,14 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>excelFy — Digital Products</title>
 
+  <!-- Fija resolución de rutas relativas (clave para GitHub Pages o subrutas) -->
+  <base href="./">
+
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="styles/globals.css">
+  <!-- Styles (con bust de caché) -->
+  <link rel="stylesheet" href="styles/globals.css?v=2">
 </head>
 <body>
   <!-- Data background -->
@@ -139,7 +142,7 @@
     <a href="https://www.etsy.com" target="_blank" rel="noopener">Visit our Etsy Store</a>
   </footer>
 
-  <!-- Scripts -->
-  <script src="scripts/main.js" defer></script>
+  <!-- Scripts (defer + bust de caché) -->
+  <script src="scripts/main.js?v=2" defer></script>
 </body>
 </html>
