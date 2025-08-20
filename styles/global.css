@@ -7,7 +7,7 @@
 /* Base */
 *{box-sizing:border-box}
 body{
-  margin:0; font-family:'League Spartan',system-ui,Arial,sans-serif; overflow:hidden; color:var(--ink);
+  margin:0; font-family:'League+Spartan','League Spartan',system-ui,Arial,sans-serif; overflow:hidden; color:var(--ink);
   background:
     radial-gradient(circle at 20% 80%, rgba(141,207,176,.10) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(79,169,133,.10) 0%, transparent 50%),
