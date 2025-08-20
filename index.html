@@ -15,12 +15,9 @@
   <link rel="stylesheet" href="styles/global.css"/>
 </head>
 <body>
-  <!-- Preloader -->
+  <!-- Preloader: ONLY the loading bar -->
   <div id="loadingScreen" class="loading-screen">
-    <img id="loaderLogo" class="loader-logo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png" alt="excelFy logo"/>
     <div class="loading-bar"><div id="loadingProgress" class="loading-progress"></div></div>
-    <div id="loadingPercent" class="loading-percent">0%</div>
-    <p class="loading-text">Loading a data-driven experience…</p>
   </div>
 
   <!-- Background data canvas -->
@@ -82,9 +79,8 @@
       <span style="color:#ffffff;">Tracker</span><span style="color:#8DCFB0;">Fy</span>
     </h1>
 
-    <div id="productImage" class="product-page-image glass" aria-label="Product image">
-      <span style="color:#8DCFB0;font-size:2rem;font-weight:700;">Product image</span>
-    </div>
+    <!-- container kept for layout, but no visual frame -->
+    <div id="productImage" class="product-page-image" aria-label="Product image"></div>
 
     <div id="productPageDescription" class="product-page-description">
       Track your daily habits and goals with customizable templates and progress charts.
@@ -132,7 +128,7 @@
     </div>
   </section>
 
-  <!-- Easter Egg Modal (EN) -->
+  <!-- Easter Egg Modal -->
   <div id="easterEggModal" class="easter-egg-modal" role="dialog" aria-modal="true" aria-labelledby="ee-title">
     <div class="easter-egg-content">
       <h2 id="ee-title" style="font-size:2.2rem;margin-bottom:1rem;font-weight:900;">🎉 SECRET DISCOUNT! 🎉</h2>
