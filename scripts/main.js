@@ -51,26 +51,6 @@ function hideLoadingScreen() {
   }, 3000);
 }
 
-// ===== Breadcrumbs
-function updateBreadcrumbs(path) {
-  const bc = document.getElementById('breadcrumbs');
-  bc.innerHTML = '';
-  path.forEach((item, i) => {
-    const span = document.createElement('span');
-    span.className = 'breadcrumb-item';
-    span.textContent = item.name;
-    span.onclick = item.action;
-    bc.appendChild(span);
-    if (i < path.length - 1) {
-      const sep = document.createElement('span');
-      sep.className = 'breadcrumb-separator';
-      sep.textContent = ' > ';
-      bc.appendChild(sep);
-    }
-  });
-  bc.classList.add('show');
-}
-
 // ===== Easter egg
 let easterEggSequence = [];
 const easterEggCode = ['e','x','c','e','l','f','y'];
@@ -102,9 +82,7 @@ const productData = {
   loanfy:    { title: '<span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>',    description:'Calculate loan payments and track your debt with comprehensive loan management.' }
 };
 
-// ===== Navegación
-function goHome(){ showFolder(); updateBreadcrumbs([{name:'Inicio', action:goHome}]); }
-
+// ===== Navegación (sin breadcrumbs)
 function showProducts(){
   document.getElementById('folderContainer').classList.add('opened');
   document.getElementById('productsContainer').classList.add('show');
@@ -116,15 +94,12 @@ function showProducts(){
   }, 500);
 
   setTimeout(()=> document.getElementById('folderLogo').style.opacity = '0', 200);
-
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
   playSound(440,.3);
 }
 
 function showFolder(){
   document.getElementById('folderContainer').classList.remove('opened');
   document.getElementById('productsContainer').classList.remove('show');
-  document.getElementById('breadcrumbs').classList.remove('show');
   setTimeout(()=> document.getElementById('folderLogo').style.opacity = '1', 200);
   playSound(330,.2);
 }
@@ -140,32 +115,20 @@ function showProductPage(productId){
   btn.onclick = ()=>openEtsy(productId);
 
   page.classList.add('show');
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts},{name:productId.charAt(0).toUpperCase()+productId.slice(1), action:()=>showProductPage(productId)}]);
   playSound(523,.3);
 }
 
 function hideProductPage(){
   document.getElementById('productPage').classList.remove('show');
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
   playSound(392,.2);
 }
 
-function showAboutPage(){
-  document.getElementById('aboutPage').classList.add('show');
-  updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Acerca de', action:showAboutPage}]);
-  playSound(659,.3);
-}
-function hideAboutPage(){
-  document.getElementById('aboutPage').classList.remove('show');
-  document.getElementById('breadcrumbs').classList.remove('show');
-  playSound(392,.2);
-}
+// About
+function showAboutPage(){ document.getElementById('aboutPage').classList.add('show'); }
+function hideAboutPage(){ document.getElementById('aboutPage').classList.remove('show'); }
 
-function openEtsy(product){
-  // reemplaza con tus URLs reales si quieres
-  window.open('https://www.etsy.com','_blank');
-  playSound(784,.2);
-}
+// ETSY
+function openEtsy(){ window.open('https://www.etsy.com','_blank'); playSound(784,.2); }
 
 // Tema
 function toggleTheme(){
@@ -189,8 +152,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   hideLoadingScreen();
 });
 
-// Exponer funciones globales usadas por atributos HTML
-window.goHome = goHome;
+// Exponer funciones globales
 window.showProducts = showProducts;
 window.showFolder = showFolder;
 window.showProductPage = showProductPage;

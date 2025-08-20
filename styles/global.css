@@ -36,28 +36,6 @@
   border:1px solid rgba(141,207,176,.2); box-shadow:0 8px 32px rgba(0,0,0,.3);
 }
 
-/* ===== Breadcrumbs ===== */
-.breadcrumbs{
-  position:fixed; top:80px; left:2rem; z-index:30; display:flex; align-items:center; gap:.5rem;
-  font-size:.9rem; color:#8DCFB0; opacity:0; transform:translateY(-20px); transition:all .3s ease;
-}
-.breadcrumbs.show{ opacity:1; transform:translateY(0); }
-.breadcrumb-item{ transition:color .3s ease; }
-.breadcrumb-item:hover{ color:#4FA985; }
-.breadcrumb-separator{ color:rgba(141,207,176,.5); }
-
-/* ===== Easter Egg Modal ===== */
-.easter-egg-modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.8); display:flex; justify-content:center; align-items:center;
-  z-index:9999; opacity:0; pointer-events:none; transition:all .3s ease;
-}
-.easter-egg-modal.show{ opacity:1; pointer-events:all; }
-.easter-egg-content{
-  background:linear-gradient(135deg,#8DCFB0,#4FA985); padding:3rem; border-radius:20px; text-align:center; color:#0f0f0f;
-  transform:scale(.8); transition:transform .3s ease; box-shadow:0 20px 60px rgba(0,0,0,.5);
-}
-.easter-egg-modal.show .easter-egg-content{ transform:scale(1); }
-
 /* ===== Body + Temas ===== */
 body{
   font-family:'League Spartan',sans-serif; margin:0; padding:0; overflow:hidden;
