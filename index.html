@@ -1,496 +1,472 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>excelFy Digital Products</title>
+  <title>excelFy — Digital Products</title>
 
-  <!-- Tailwind -->
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Fuente -->
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ====== BRAND / BASE ====== */
-    @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap');
+    :root{
+      --mint:#8DCFB0; --mint-2:#4FA985;
+      --bg-0:#0f0f0f; --bg-1:#1a1a1a; --ink:#eaf4ef;
+      --ink-dark:#1f2937; /* light theme text */
+    }
+    *{box-sizing:border-box}
     body{
-      font-family:'League Spartan',sans-serif; margin:0; padding:0; overflow:hidden;
+      margin:0; font-family:'League Spartan',system-ui,Arial,sans-serif; overflow:hidden; color:var(--ink);
       background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.1) 0%, transparent 50%),
-        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
-      transition:all .5s ease;
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,.10) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,.10) 0%, transparent 50%),
+        linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, #0a0a0a 100%);
+      transition:background .5s ease, color .5s ease;
     }
-    /* Tema claro */
+
+    /* ===== Light theme – improved contrast ===== */
     body.light-theme{
+      color:var(--ink-dark);
       background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.15) 0%, transparent 50%),
-        linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,.12), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,.12), transparent 50%),
+        linear-gradient(135deg,#f5f7f7 0%,#eef2f2 50%,#e6ecec 100%);
     }
-    .light-theme .products-container,
-    .light-theme .product-page,
-    .light-theme .about-page{
-      background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.15) 0%, transparent 50%),
-        linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%) !important;
+    .light-theme .glass{
+      background:rgba(141,207,176,.10);
+      border:1.5px solid rgba(79,169,133,.35);
+      color:#23332b !important;
+      box-shadow:0 6px 22px rgba(0,0,0,.15);
     }
     .light-theme .product-page-image{ background:#ffffff; border-color:#4FA985; }
-    .light-theme .product-page-description{ color:#2d3748; }
-    .light-theme .about-content p, .light-theme .about-content h1{ color:#2d3748 !important; }
-    .light-theme .product-title{ color:#4FA985 !important; }
-    .light-theme .product-title:hover{ color:#36A96B !important; }
-    .light-theme .arrow-back{ color:#4FA985 !important; }
-    .light-theme h1 span[style*="color: white"]{ color:#2d3748 !important; }
+    .light-theme .product-page-description{ color:#2b2b2b; }
+    .light-theme h1 span[style*="color: white"]{ color:#2b2b2b !important; }
 
-    /* ====== CUSTOM CURSOR ====== */
-    *{ cursor:none; }
-    .custom-cursor{
-      position:fixed; width:24px; height:24px; background:transparent;
-      border:2px solid #8DCFB0; border-radius:50%; pointer-events:none; z-index:9999;
-      transition:none; box-shadow:0 0 15px rgba(141,207,176,.4);
-    }
-    .custom-cursor::before{
-      content:''; position:absolute; top:50%; left:50%; width:6px; height:6px;
-      background:#8DCFB0; border-radius:50%; transform:translate(-50%,-50%);
-    }
-    .custom-cursor.hover{ width:40px; height:40px; border-color:#4FA985; box-shadow:0 0 25px rgba(79,169,133,.6); }
-
-    /* ====== LOADING ====== */
-    .loading-screen{
-      position:fixed; inset:0;
-      background:linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      z-index:10000; transition:opacity .8s ease;
-    }
-    .loading-logo{ font-size:4rem; font-weight:900; margin-bottom:2rem; opacity:0; animation:logoAppear 2s ease forwards; }
-    .loading-bar{ width:300px; height:4px; background:rgba(141,207,176,0.2); border-radius:2px; overflow:hidden; margin-top:2rem; }
-    .loading-progress{ height:100%; background:linear-gradient(90deg, #8DCFB0, #4FA985); width:0%; animation:loadProgress 3s ease forwards; box-shadow:0 0 10px rgba(141,207,176,.5); }
-
-    /* ====== PARTICLES ====== */
-    .particles-container{ position:fixed; inset:0; pointer-events:none; z-index:1; }
-    .particle{
-      position:absolute; background:radial-gradient(circle, rgba(141,207,176,.8), rgba(79,169,133,.4));
-      border-radius:50%; animation:float 6s infinite ease-in-out;
-    }
-
-    /* ====== GLASS ====== */
+    /* ===== Glass style ===== */
     .glass{
-      background:rgba(141,207,176,0.1);
+      background:rgba(141,207,176,.12);
       backdrop-filter:blur(10px);
-      border:1px solid rgba(141,207,176,0.2);
-      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+      border:1px solid rgba(141,207,176,.28);
+      box-shadow:0 8px 32px rgba(0,0,0,.32);
     }
 
-    /* ====== BREADCRUMBS ====== */
-    .breadcrumbs{
-      position:fixed; top:80px; left:2rem; z-index:30; display:flex; align-items:center; gap:.5rem;
-      font-size:.9rem; color:#8DCFB0; opacity:0; transform:translateY(-20px); transition:all .3s ease;
-    }
-    .breadcrumbs.show{ opacity:1; transform:translateY(0); }
-    .breadcrumb-item{ transition:color .3s ease; }
-    .breadcrumb-item:hover{ color:#4FA985; }
-    .breadcrumb-separator{ color:rgba(141,207,176,0.5); }
+    /* ===== Header ===== */
+    .site-header{ position:fixed; top:22px; left:50%; transform:translateX(-50%); text-align:center; z-index:20; }
+    .brand{ margin:0; font-weight:900; letter-spacing:.3px; font-size:28px; }
+    .brand .excel{ color:#fff; }
+    .brand .fy{ color:var(--mint); }
+    .tagline{ margin:.25rem 0 0; color:var(--mint); font-weight:600; font-size:14px; }
+    .tip{ margin-top:.25rem; font-size:12px; color:#93e0bf; opacity:.9; }
 
-    /* ====== EASTER EGG MODAL ====== */
-    .easter-egg-modal{
-      position:fixed; inset:0; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center;
-      z-index:9999; opacity:0; pointer-events:none; transition:all .3s ease;
+    .top-actions{ position:fixed; top:18px; right:18px; display:flex; gap:12px; z-index:20; }
+    .icon-btn{
+      width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+      border:2px solid rgba(141,207,176,.6); color:var(--mint); background:rgba(141,207,176,.08);
     }
-    .easter-egg-modal.show{ opacity:1; pointer-events:all; }
-    .easter-egg-content{
-      background:linear-gradient(135deg, #8DCFB0, #4FA985); padding:3rem; border-radius:20px; text-align:center; color:#0f0f0f;
-      transform:scale(.8); transition:transform .3s ease; box-shadow:0 20px 60px rgba(0,0,0,.5);
+    .pill-btn{
+      display:inline-flex;align-items:center;padding:.5rem 1rem;border-radius:999px;cursor:pointer;
+      border:2px solid rgba(141,207,176,.6); color:var(--mint); background:rgba(141,207,176,.08);
+      text-decoration:none; font-weight:700;
     }
-    .easter-egg-modal.show .easter-egg-content{ transform:scale(1); }
 
-    /* ====== FOLDER / VISTAS ====== */
-    .folder-container{
-      position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center;
-      transition:transform .8s cubic-bezier(.25,.46,.45,.94); z-index:10;
+    /* ===== Data canvas (background) ===== */
+    #dataCanvas{ position:fixed; inset:0; z-index:0; }
+
+    /* ===== Loading screen with sliding logo ===== */
+    .loading-screen{
+      position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#0f1010,#161919 60%,#0d0f0f); z-index:10000; transition:opacity .7s ease;
     }
+    .loading-track{
+      position:relative; width:min(70vw,420px); height:56px; border-radius:999px; overflow:hidden;
+      border:1.5px solid rgba(141,207,176,.35); background:rgba(141,207,176,.08);
+      box-shadow:0 12px 40px rgba(0,0,0,.45), 0 0 0 2px rgba(141,207,176,.12) inset;
+      margin-top:1rem;
+    }
+    .loading-logo{
+      position:absolute; top:50%; transform:translateY(-50%); left:-40%;
+      height:40px; filter:drop-shadow(0 4px 12px rgba(141,207,176,.4));
+      animation:slide-logo 2.6s ease-in-out infinite;
+    }
+    @keyframes slide-logo{
+      0%{ left:-40%; opacity:.8 }
+      80%{ left:100%; opacity:1 }
+      100%{ left:100%; opacity:1 }
+    }
+    .loading-copy{ color:var(--mint); font-size:1rem; margin-top:1rem; }
+
+    /* ===== Folder / hero ===== */
+    .hero{ position:fixed; inset:0; display:grid; place-items:center; z-index:10; }
+    .folder{
+      position:relative; width:min(64vw,560px); height:min(48vw,420px); background:#fff; border-radius:26px;
+      /* Glow/Sombra alrededor */
+      box-shadow:0 32px 64px rgba(0,0,0,.45), 0 0 0 2px rgba(255,255,255,.06) inset,
+                 0 0 36px rgba(141,207,176,.28), 0 0 72px rgba(79,169,133,.18);
+      transition:transform .25s ease, box-shadow .25s ease;
+      cursor:pointer;
+    }
+    .folder:hover{ transform:translateY(-2px); box-shadow:0 38px 72px rgba(0,0,0,.5), 0 0 48px rgba(141,207,176,.34); }
+    .folder-tab{ position:absolute; left:13%; top:-54px; width:58%; height:82px; background:#fff; border-top-left-radius:24px; border-top-right-radius:18px; box-shadow:0 18px 30px rgba(0,0,0,.25); }
+    .folder-lip{ position:absolute; left:14%; top:68px; width:72%; height:16px; background:#111; border-radius:12px; filter:blur(.2px); }
+    .folder-logo{ position:absolute; inset:0; display:grid; place-items:center; font-weight:900; font-size: clamp(40px,7vw,76px); }
+    .folder-logo .in-excel{ color:#0f0f0f; }
+    .folder-logo .in-fy{ color:var(--mint-2); }
+
+    /* Transition to products */
+    .folder-container{ position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; transition:transform .7s cubic-bezier(.25,.46,.45,.94); z-index:10; }
     .folder-container.opened{ transform:translateX(-60vw) scale(.6); }
-    .folder{ width:60vmin; height:45vmin; cursor:pointer; transition:all .3s ease; position:relative; }
-    .folder:hover{ transform:scale(1.02); filter:drop-shadow(0 15px 25px rgba(141,207,176,.3)); }
-    .folder:active{ transform:scale(.98); }
 
+    /* Products list */
     .products-container{
       position:absolute; inset:0;
       background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.1) 0%, transparent 50%),
-        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,.10), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,.10), transparent 50%),
+        linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0a0a0a 100%);
       display:flex; flex-direction:column; justify-content:center; align-items:center;
-      opacity:0; pointer-events:none; transition:opacity .8s ease; z-index:5;
+      opacity:0; pointer-events:none; transition:opacity .6s ease; z-index:5;
     }
-    .products-container.show{ opacity:1; pointer-events:all; }
-
+    .products-container.show{ opacity:1; pointer-events:auto; }
     .product-title{
-      font-size:clamp(3rem, 8vw, 6rem);
-      font-weight:900; color:#8DCFB0; margin:.5rem 0; cursor:pointer;
-      transition:all .3s ease; opacity:0; transform:translateY(50px);
+      font-size:clamp(3rem,8vw,6rem); font-weight:900; color:var(--mint); margin:.5rem 0; opacity:0; transform:translateY(12px);
     }
-    .product-title.typewriter{ animation:typewriter 1s ease forwards; }
-    .product-title:hover{ transform:scale(1.05) translateY(-10px); color:#4FA985; text-shadow:0 10px 20px rgba(141,207,176,.3); }
+    /* Fade rápido y todos juntos */
+    .products-container.show .product-title{ animation:fadeInUp .35s ease forwards; }
+    @keyframes fadeInUp{ to{ opacity:1; transform:translateY(0) } }
 
+    /* Product page */
     .product-page{
       position:absolute; top:0; left:100vw; width:100vw; height:100vh;
       background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.1) 0%, transparent 50%),
-        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      padding:2rem; transition:left .8s cubic-bezier(.25,.46,.45,.94); z-index:15;
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,.10), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,.10), transparent 50%),
+        linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0a0a0a 100%);
+      display:flex; flex-direction:column; justify-content:center; align-items:center; padding:2rem;
+      transition:left .7s cubic-bezier(.25,.46,.45,.94); z-index:15;
     }
     .product-page.show{ left:0; }
-    .product-page-title{ font-size:clamp(4rem, 10vw, 8rem); font-weight:900; margin-bottom:1.5rem; margin-top:1rem; text-align:center; }
+    .product-page-title{ font-size:clamp(4rem,10vw,8rem); font-weight:900; margin:1rem 0 1.2rem; text-align:center; }
     .product-page-image{
-      width:70%; max-width:400px; height:250px; background:#2a2a2a; border-radius:20px; margin:.5rem 0;
-      display:flex; align-items:center; justify-content:center; border:3px solid #8DCFB0; box-shadow:0 10px 30px rgba(0,0,0,.3); transition:all .3s ease;
+      width:72%; max-width:520px; min-height:260px; background:#222; border-radius:20px; margin:.5rem 0;
+      display:flex; align-items:center; justify-content:center; border:3px solid var(--mint); box-shadow:0 10px 30px rgba(0,0,0,.35);
+      overflow:hidden;
     }
-    .product-page-image:hover{ transform:scale(1.02); box-shadow:0 15px 40px rgba(141,207,176,.4); }
-    .product-page-description{ font-size:1rem; color:#ffffff; line-height:1.5; text-align:center; max-width:500px; margin-top:1rem; }
+    .product-page-image img{ width:100%; height:auto; display:block; }
 
+    .product-page-description{ font-size:1rem; color:#ffffff; line-height:1.55; text-align:center; max-width:640px; margin-top:1rem; }
+
+    /* About page */
     .about-page{
       position:absolute; top:100vh; left:0; width:100vw; height:100vh;
       background:
-        radial-gradient(circle at 20% 80%, rgba(141,207,176,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(79,169,133,0.15) 0%, transparent 50%),
-        linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      padding:2rem; transition:top .8s cubic-bezier(.25,.46,.45,.94); z-index:20; overflow-y:auto;
+        radial-gradient(circle at 20% 80%, rgba(141,207,176,.15), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(79,169,133,.15), transparent 50%),
+        linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0a0a0a 100%);
+      display:flex; flex-direction:column; justify-content:center; align-items:center; padding:2rem;
+      transition:top .7s cubic-bezier(.25,.46,.45,.94); z-index:20; overflow-y:auto;
     }
     .about-page.show{ top:0; }
-    .about-content{ max-width:1000px; width:100%; opacity:0; transform:translateY(50px); transition:all .6s ease .3s; }
+    .about-content{ max-width:1000px; width:100%; opacity:0; transform:translateY(40px); transition:all .5s ease .2s; }
     .about-page.show .about-content{ opacity:1; transform:translateY(0); }
 
-    /* ====== LOGO FX ====== */
-    .logo-container{ transition:all .3s ease; transform-origin:center; }
-    .logo-container:hover{ transform:scale(1.1) rotate(5deg); }
-    .logo-glow{ animation:logoGlow 2s ease-in-out infinite alternate; }
-
-    /* ====== KEYFRAMES ====== */
-    @keyframes logoAppear{ 0%{opacity:0;transform:scale(.5) rotate(-180deg)} 50%{opacity:.5;transform:scale(.8) rotate(-90deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
-    @keyframes loadProgress{ 0%{width:0%} 100%{width:100%} }
-    @keyframes float{ 0%,100%{transform:translateY(0) rotate(0)} 33%{transform:translateY(-20px) rotate(120deg)} 66%{transform:translateY(10px) rotate(240deg)} }
-    @keyframes typewriter{ 0%{opacity:0;transform:translateY(50px)} 100%{opacity:1;transform:translateY(0)} }
-    @keyframes logoGlow{ 0%{text-shadow:0 0 5px rgba(141,207,176,.5)} 100%{text-shadow:0 0 20px rgba(141,207,176,.8), 0 0 30px rgba(79,169,133,.6)} }
-    @keyframes fadeIn{ to{opacity:1} }
-    @keyframes fadeInUp{ to{opacity:1; transform:translateY(0)} }
-    @keyframes bounce{
-      0%,20%,50%,80%,100%{ transform:translateX(-50%) translateY(0) }
-      40%{ transform:translateX(-50%) translateY(-10px) }
-      60%{ transform:translateX(-50%) translateY(-5px) }
+    /* Footer */
+    .site-footer{
+      position:fixed; bottom:14px; left:0; right:0; padding:0 18px; z-index:20;
+      display:flex; align-items:center; justify-content:space-between; font-size:14px; color:var(--mint);
     }
-    @keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-    .pulse-animation{ animation:pulse 2s infinite; }
+    .site-footer a{ color:var(--mint-2); text-decoration:none; font-weight:700; }
+    .site-footer a:hover{ text-decoration:underline; }
   </style>
 </head>
 <body>
-  <!-- Loading -->
+  <!-- Data background -->
+  <canvas id="dataCanvas"></canvas>
+
+  <!-- Loading Screen -->
   <div id="loadingScreen" class="loading-screen">
-    <div class="loading-logo logo-glow">
-      <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
+    <div class="loading-track">
+      <img class="loading-logo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png" alt="excelFy logo"/>
     </div>
-    <div class="loading-bar"><div class="loading-progress"></div></div>
-    <p style="color:#8DCFB0;margin-top:1rem;font-size:1.1rem;">Cargando experiencia increíble...</p>
-  </div>
-
-  <!-- Cursor -->
-  <div class="custom-cursor" id="cursor"></div>
-
-  <!-- Partículas -->
-  <div class="particles-container" id="particles"></div>
-
-  <!-- Breadcrumbs -->
-  <div id="breadcrumbs" class="breadcrumbs">
-    <span class="breadcrumb-item" onclick="goHome()">Inicio</span>
-  </div>
-
-  <!-- Easter Egg -->
-  <div id="easterEggModal" class="easter-egg-modal">
-    <div class="easter-egg-content">
-      <h2 style="font-size:2.5rem;margin-bottom:1rem;font-weight:900;">🎉 ¡DESCUENTO SECRETO! 🎉</h2>
-      <p style="font-size:1.3rem;margin-bottom:1.5rem;font-weight:600;">¡Has encontrado el código secreto!</p>
-      <div style="background:rgba(0,0,0,0.2);padding:1rem;border-radius:10px;margin:1rem 0;">
-        <p style="font-size:1.1rem;margin-bottom:.5rem;">Usa el código:</p>
-        <p style="font-size:2rem;font-weight:900;letter-spacing:3px;">EXCELFY10</p>
-      </div>
-      <p style="font-size:1rem;margin-bottom:1.5rem;">Para obtener 10% de descuento en cualquier producto</p>
-      <button onclick="closeEasterEgg()" style="padding:.8rem 2rem;background:#0f0f0f;color:#8DCFB0;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .3s;">
-        ¡Genial!
-      </button>
-    </div>
+    <div class="loading-copy">Loading a data-driven experience…</div>
   </div>
 
   <!-- Header -->
-  <div class="absolute top-0 left-0 w-full z-20 p-6">
-    <div class="text-center logo-container">
-      <h1 class="text-2xl font-bold logo-glow" id="mainLogo">
-        <span style="color:white;">excel</span><span style="color:#8DCFB0;">Fy</span>
-      </h1>
-      <p class="text-lg" style="color:#8DCFB0;">Digital Products Collection</p>
-    </div>
-    <div class="absolute top-6 right-6 flex gap-3 items-center">
-      <button id="themeToggle" onclick="toggleTheme()" class="glass"
-        style="padding:.5rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:50%;font-size:1rem;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center"
-        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.1)'"
-        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">◐</button>
+  <header class="site-header" aria-label="Header">
+    <h1 class="brand"><span class="excel">excel</span><span class="fy">Fy</span></h1>
+    <p class="tagline">Digital Products Collection</p>
+    <p class="tip">Tip: type “excelfy” anytime for a surprise.</p>
+  </header>
 
-      <button onclick="showAboutPage()" class="glass"
-        style="padding:.5rem 1rem;color:#8DCFB0;border:2px solid #8DCFB0;border-radius:25px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
-        onmouseover="this.style.background='#8DCFB0';this.style.color='#0f0f0f';this.style.transform='scale(1.05)'"
-        onmouseout="this.style.background='rgba(141,207,176,0.1)';this.style.color='#8DCFB0';this.style.transform='scale(1)'">About Us</button>
-    </div>
+  <!-- Top-right actions -->
+  <div class="top-actions">
+    <button class="icon-btn glass" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">◐</button>
+    <button class="pill-btn glass" onclick="showAboutPage()">About Us</button>
   </div>
 
-  <!-- Carpeta -->
-  <div id="folderContainer" class="folder-container">
-    <div class="folder pulse-animation" onclick="showProducts()">
-      <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-        <img src="https://i.ibb.co/MytD6V85/Folder-icon.png" alt="Folder-icon"
-             style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);drop-shadow(0 8px 16px rgba(0,0,0,0.3));"/>
-        <img id="folderLogo" src="https://i.ibb.co/b5hsKhHs/Logos-3-colores-PNG-01.png"
-             style="position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);width:50%;height:auto;transition:opacity .3s;z-index:2;"/>
+  <!-- Folder hero -->
+  <main class="hero" aria-label="Main">
+    <div id="folderContainer" class="folder-container">
+      <div class="folder" onclick="showProducts()">
+        <div class="folder-tab"></div>
+        <div class="folder-lip"></div>
+        <div class="folder-logo">
+          <span class="in-excel">excel</span><span class="in-fy">Fy</span>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Productos -->
-  <div id="productsContainer" class="products-container">
-    <div class="arrow-back" onclick="showFolder()"
-         style="position:absolute;right:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;opacity:0;animation:fadeIn .5s ease 1.2s forwards;font-family:Arial,sans-serif;font-weight:bold"
-         onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
-         onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
-
+  <!-- Products -->
+  <section id="productsContainer" class="products-container" aria-label="Products">
+    <div class="arrow-back" onclick="showFolder()" style="position:absolute;right:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;font-weight:bold">◀</div>
     <h1 class="product-title" onclick="showProductPage('trackerfy')"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
     <h1 class="product-title" onclick="showProductPage('budgetfy')"><span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span></h1>
     <h1 class="product-title" onclick="showProductPage('investfy')"><span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span></h1>
     <h1 class="product-title" onclick="showProductPage('loanfy')"><span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span></h1>
-  </div>
+  </section>
 
-  <!-- Detalle -->
-  <div id="productPage" class="product-page">
-    <div class="arrow-back" onclick="hideProductPage()"
-         style="position:absolute;left:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold"
-         onmouseover="this.style.color='#4FA985';this.style.transform='translateY(-50%) scale(1.2)'"
-         onmouseout="this.style.color='#8DCFB0';this.style.transform='translateY(-50%) scale(1)'">◀</div>
-
+  <!-- Product detail -->
+  <section id="productPage" class="product-page" aria-label="Product detail">
+    <div class="arrow-back" onclick="hideProductPage()" style="position:absolute;left:2rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:3rem;color:#8DCFB0;font-weight:bold">◀</div>
     <h1 id="productPageTitle" class="product-page-title"><span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span></h1>
-    <div class="product-page-image glass"><span style="color:#8DCFB0;font-size:2rem;font-weight:600;">Product Image</span></div>
-    <div id="productPageDescription" class="product-page-description">Track your daily habits and goals with customizable templates and progress charts.</div>
-    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass"
-            style="margin-top:1rem;padding:.7rem 1.5rem;background:#8DCFB0;color:#0f0f0f;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'League Spartan',sans-serif"
-            onmouseover="this.style.background='#4FA985';this.style.transform='scale(1.05)'"
-            onmouseout="this.style.background='#8DCFB0';this.style.transform='scale(1)'">View on Etsy</button>
-  </div>
+    <div id="productImage" class="product-page-image glass">
+      <span style="color:#8DCFB0;font-size:1.6rem;font-weight:700;">Product image</span>
+    </div>
+    <div id="productPageDescription" class="product-page-description">
+      Track your daily habits and goals with customizable templates and progress charts.
+    </div>
+    <button id="etsyButton" onclick="openEtsy('trackerfy')" class="glass" style="margin-top:1rem;padding:.7rem 1.5rem;background:#8DCFB0;color:#0f0f0f;border:none;border-radius:10px;font-size:1rem;font-weight:800;cursor:pointer">
+      View on Etsy
+    </button>
+  </section>
 
-  <!-- About -->
-  <div id="aboutPage" class="about-page">
-    <button onclick="hideAboutPage()" style="position:absolute;left:2rem;top:2rem;cursor:pointer;font-size:2rem;color:#8DCFB0;background:none;border:none;transition:all .3s;font-family:Arial,sans-serif;font-weight:bold;z-index:25;padding:.5rem"
-            onmouseover="this.style.color='#4FA985';this.style.transform='scale(1.2)'" onmouseout="this.style.color='#8DCFB0';this.style.transform='scale(1)'">✕</button>
+  <!-- About page -->
+  <section id="aboutPage" class="about-page" aria-label="About us">
+    <button onclick="hideAboutPage()" style="position:absolute;left:2rem;top:2rem;cursor:pointer;font-size:2rem;color:#8DCFB0;background:none;border:none;font-weight:bold">✕</button>
     <div class="about-content">
-      <h1 style="font-size:clamp(3rem, 8vw, 6rem); font-weight:900; margin-bottom:2rem; text-align:center; color:white;">
+      <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:900;margin-bottom:2rem;text-align:center;color:white;">
         About <span style="color:#8DCFB0;">excelFy</span>
       </h1>
-      <div style="max-width:600px;text-align:center;color:#ffffff;font-size:1.1rem;line-height:1.6;margin:0 auto 2rem auto;">
-        <p style="margin-bottom:1rem;">We create elegant Excel templates that help you track, manage, and achieve your goals with style and functionality.</p>
-        <p style="color:#8DCFB0;font-weight:600;">Transform your productivity with excelFy - where organization meets innovation.</p>
+      <div style="max-width:640px;text-align:center;color:#ffffff;font-size:1.1rem;line-height:1.6;margin:0 auto 2rem;">
+        <p style="margin-bottom:1rem;">We craft elegant, functional templates for Excel and Google Sheets to help you track, manage and visualize your data.</p>
+        <p style="color:#8DCFB0;font-weight:700;">Boost your productivity with excelFy — where organization meets insight.</p>
       </div>
       <div style="display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #8DCFB0;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
-            <span style="color:#8DCFB0;font-size:1rem;font-weight:600;">Nahuel</span>
+        <div class="glass" style="text-align:center;padding:1.5rem;border-radius:15px;">
+          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #8DCFB0;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;box-shadow:0 8px 20px rgba(0,0,0,.3);">
+            <span style="color:#8DCFB0;font-weight:700;">Nahuel</span>
           </div>
-          <h3 style="color:#8DCFB0;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
-          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Technical expert</p>
+          <h3 style="color:#8DCFB0;margin:.2rem 0;">Co-Founder</h3>
+          <p style="color:#ffffff;font-size:.95rem;max-width:160px;margin:0 auto;">Technical expert</p>
         </div>
+        <div class="glass" style="text-align:center;padding:1.5rem;border-radius:15px;">
+          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #4FA985;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;box-shadow:0 8px 20px rgba(0,0,0,.3);">
+            <span style="color:#4FA985;font-weight:700;">Juan</span>
+          </div>
+          <h3 style="color:#4FA985;margin:.2rem 0;">Co-Founder</h3>
+          <p style="color:#ffffff;font-size:.95rem;max-width:160px;margin:0 auto;">Creative designer</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="glass" style="text-align:center;transition:all .3s;padding:1.5rem;border-radius:15px" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-          <div style="width:100px;height:100px;border-radius:50%;background:#2a2a2a;border:2px solid #4FA985;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem auto;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:all .3s;">
-            <span style="color:#4FA985;font-size:1rem;font-weight:600;">Juan</span>
-          </div>
-          <h3 style="color:#4FA985;font-size:1.2rem;margin-bottom:.3rem;">Co-Founder</h3>
-          <p style="color:#ffffff;font-size:.9rem;max-width:150px;">Creative designer</p>
+  <!-- Easter egg (EN) -->
+  <div id="easterEggModal" class="about-page" style="background:rgba(0,0,0,.8); z-index:9999; top:100vh;">
+    <div class="about-content" style="max-width:560px;">
+      <div class="glass" style="padding:2rem;border-radius:20px;text-align:center;background:linear-gradient(135deg,#8DCFB0,#4FA985);color:#0f0f0f;">
+        <h2 style="font-size:2.2rem; margin:0 0 1rem; font-weight:900;">🎉 SECRET DISCOUNT! 🎉</h2>
+        <p style="font-size:1.15rem; margin:.2rem 0 1.2rem; font-weight:700;">You found the secret code!</p>
+        <div style="background:rgba(0,0,0,.18); padding:1rem; border-radius:10px; margin:1rem 0;">
+          <p style="margin:0 0 .5rem;">Use this code:</p>
+          <p style="font-size:2rem; font-weight:900; letter-spacing:3px; margin:0;">EXCELFY10</p>
         </div>
+        <p style="margin:.5rem 0 1.2rem;">Get <strong>10% off</strong> any product</p>
+        <button onclick="closeEasterEgg()" class="glass" style="padding:.8rem 2rem; background:#0f0f0f; color:#8DCFB0; border:none; border-radius:10px; font-weight:800; cursor:pointer;">Awesome!</button>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <div class="absolute bottom-0 left-0 w-full z-20 p-4">
-    <div class="flex justify-between items-center text-sm" style="color:#8DCFB0;">
-      <p>© 2025 excelFy. All rights reserved.</p>
-      <a href="https://www.etsy.com" target="_blank" class="hover:underline transition-all duration-300" style="color:#4FA985;">Visit our Etsy Store</a>
-    </div>
-  </div>
+  <footer class="site-footer">
+    <p>© 2025 excelFy. All rights reserved.</p>
+    <a href="https://www.etsy.com" target="_blank" rel="noopener">Visit our Etsy Store</a>
+  </footer>
 
   <script>
-    // ===== SFX
-    const playSound = (frequency, duration) => {
-      if (typeof(AudioContext)==="undefined" && typeof(webkitAudioContext)==="undefined") return;
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new Ctx(); const osc = ctx.createOscillator(); const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.frequency.value = frequency; osc.type = 'sine';
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-      osc.start(); osc.stop(ctx.currentTime + duration);
-    };
-
-    // ===== Cursor
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e => { cursor.style.left = (e.clientX-12)+'px'; cursor.style.top = (e.clientY-12)+'px'; });
-    document.addEventListener('mouseover', e => {
-      if (e.target.tagName==='BUTTON' || e.target.onclick || e.target.style.cursor==='pointer' ||
-          e.target.classList.contains('product-title') || e.target.classList.contains('arrow-back') ||
-          e.target.classList.contains('folder')) cursor.classList.add('hover');
-    });
-    document.addEventListener('mouseout', ()=>cursor.classList.remove('hover'));
-
-    // ===== Particles
-    function createParticles(){
-      const container = document.getElementById('particles');
-      for(let i=0;i<50;i++){
-        const particle = document.createElement('div');
-        particle.className='particle';
-        const size = Math.random()*4+2;
-        particle.style.width=size+'px'; particle.style.height=size+'px';
-        particle.style.left=Math.random()*100+'%'; particle.style.top=Math.random()*100+'%';
-        particle.style.animationDelay=Math.random()*6+'s';
-        particle.style.animationDuration=(Math.random()*4+4)+'s';
-        container.appendChild(particle);
-      }
+    /* ========= THEME ========= */
+    function toggleTheme(){
+      const b=document.body, btn=document.getElementById('themeToggle');
+      b.classList.toggle('light-theme');
+      const light=b.classList.contains('light-theme');
+      btn.textContent= light ? '◑' : '◐';
+      localStorage.setItem('theme', light ? 'light' : 'dark');
     }
+    document.addEventListener('DOMContentLoaded',()=>{
+      const saved=localStorage.getItem('theme');
+      if(saved==='light'){ document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent='◑'; }
+      startLoader();
+      initDataCanvas();
+      initEasterEgg();
+    });
 
-    // ===== Loading
-    function hideLoadingScreen(){
+    /* ========= LOADER ========= */
+    function startLoader(){
       setTimeout(()=>{
-        const loadingScreen=document.getElementById('loadingScreen');
-        loadingScreen.style.opacity='0';
-        setTimeout(()=>{ loadingScreen.style.display='none'; createParticles(); playSound(440,.2); },800);
-      },3000);
+        const ls=document.getElementById('loadingScreen');
+        ls.style.opacity='0';
+        setTimeout(()=> ls.style.display='none', 700);
+      }, 2600);
     }
 
-    // ===== Breadcrumbs
-    function updateBreadcrumbs(path){
-      const breadcrumbs=document.getElementById('breadcrumbs');
-      breadcrumbs.innerHTML='';
-      path.forEach((item,index)=>{
-        const span=document.createElement('span');
-        span.className='breadcrumb-item'; span.textContent=item.name; span.onclick=item.action;
-        breadcrumbs.appendChild(span);
-        if(index<path.length-1){ const sep=document.createElement('span'); sep.className='breadcrumb-separator'; sep.textContent=' > '; breadcrumbs.appendChild(sep); }
-      });
-      breadcrumbs.classList.add('show');
+    /* ========= DATA CANVAS (letters & numbers that repel cursor) ========= */
+    let dc, ctx, W, H, points=[], mouse={x:-9999,y:-9999};
+    const GLYPHS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    function initDataCanvas(){
+      dc=document.getElementById('dataCanvas'); ctx=dc.getContext('2d');
+      resizeDataCanvas(); window.addEventListener('resize', resizeDataCanvas);
+      window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+      window.addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
+      requestAnimationFrame(tick);
+    }
+    function resizeDataCanvas(){
+      W = dc.width = window.innerWidth;
+      H = dc.height = window.innerHeight;
+      const count = Math.min(220, Math.floor((W*H)/24000));  // densidad
+      points = Array.from({length:count}, () => ({
+        x: Math.random()*W, y: Math.random()*H,
+        vx:(Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25,
+        ch: GLYPHS[Math.floor(Math.random()*GLYPHS.length)],
+        size: 10 + Math.random()*14,
+        a: .35 + Math.random()*.5
+      }));
+    }
+    function tick(){
+      ctx.clearRect(0,0,W,H);
+      const isLight=document.body.classList.contains('light-theme');
+      const fill = isLight ? "rgba(35,51,43,0.75)" : "#8DCFB0";
+      for(const p of points){
+        // repulsión con el cursor
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const dist = Math.hypot(dx, dy), radius = 120;
+        if(dist < radius){
+          const f = (radius - dist)/radius;
+          const ang = Math.atan2(dy, dx);
+          p.vx += Math.cos(ang) * f * 1.0;
+          p.vy += Math.sin(ang) * f * 1.0;
+        }
+        // movimiento + fricción
+        p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy *= .985;
+
+        // wrap
+        if(p.x < -30) p.x = W+30; if(p.x > W+30) p.x = -30;
+        if(p.y < -30) p.y = H+30; if(p.y > H+30) p.y = -30;
+
+        ctx.globalAlpha = p.a;
+        ctx.fillStyle = fill;
+        ctx.font = `${p.size}px "League Spartan", system-ui, Arial, sans-serif`;
+        ctx.fillText(p.ch, p.x, p.y);
+      }
+      requestAnimationFrame(tick);
     }
 
-    // ===== Easter Egg
-    let easterEggSequence=[]; const easterEggCode=['e','x','c','e','l','f','y'];
-    document.addEventListener('keydown', e=>{
-      easterEggSequence.push(e.key.toLowerCase());
-      if(easterEggSequence.length>easterEggCode.length) easterEggSequence.shift();
-      if(JSON.stringify(easterEggSequence)===JSON.stringify(easterEggCode)){ showEasterEgg(); easterEggSequence=[]; }
-    });
-    function showEasterEgg(){ const modal=document.getElementById('easterEggModal'); modal.classList.add('show'); playSound(523,.3); setTimeout(()=>playSound(659,.3),200); setTimeout(()=>playSound(784,.5),400); }
-    function closeEasterEgg(){ document.getElementById('easterEggModal').classList.remove('show'); playSound(392,.2); }
-
-    // ===== Logo SFX
-    document.getElementById('mainLogo').addEventListener('mouseenter', ()=>playSound(523,.1));
-
-    // ===== Data
-    const productData={
-      'trackerfy':{ title:'<span style="color: white;">Tracker</span><span style="color: #8DCFB0;">Fy</span>', description:'Track your daily habits and goals with customizable templates and progress charts.' },
-      'budgetfy': { title:'<span style="color: white;">Budget</span><span style="color: #4FA985;">Fy</span>', description:'Manage your finances with comprehensive budgeting tools and expense tracking.' },
-      'investfy': { title:'<span style="color: white;">Invest</span><span style="color: #36A96B;">Fy</span>', description:'Plan your investment portfolio with detailed analysis and tracking tools.' },
-      'loanfy':   { title:'<span style="color: white;">Loan</span><span style="color: #2D6B4F;">Fy</span>', description:'Calculate loan payments and track your debt with comprehensive loan management.' }
-    };
-
-    // ===== Navegación
-    function goHome(){ showFolder(); updateBreadcrumbs([{name:'Inicio', action:goHome}]); }
-
+    /* ========= NAVIGATION (folder -> list -> product) ========= */
     function showProducts(){
       document.getElementById('folderContainer').classList.add('opened');
       document.getElementById('productsContainer').classList.add('show');
-      setTimeout(()=>{
-        document.querySelectorAll('.product-title').forEach((title, i)=>{
-          setTimeout(()=>{ title.classList.add('typewriter'); playSound(330 + (i*50), .1); }, i*200);
-        });
-      },500);
-      setTimeout(()=>{ document.getElementById('folderLogo').style.opacity='0'; },200);
-      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
-      playSound(440,.3);
     }
-
     function showFolder(){
       document.getElementById('folderContainer').classList.remove('opened');
       document.getElementById('productsContainer').classList.remove('show');
-      document.getElementById('breadcrumbs').classList.remove('show');
-      setTimeout(()=>{ document.getElementById('folderLogo').style.opacity='1'; },200);
-      playSound(330,.2);
     }
 
-    function showProductPage(productId){
-      const page=document.getElementById('productPage');
-      document.getElementById('productPageTitle').innerHTML=productData[productId].title;
-      document.getElementById('productPageDescription').textContent=productData[productId].description;
-      document.getElementById('etsyButton').onclick=()=>openEtsy(productId);
+    /* ========= PRODUCT DATA ========= */
+    const productData = {
+      trackerfy: {
+        title: '<span style="color:white;">Tracker</span><span style="color:#8DCFB0;">Fy</span>',
+        description: 'Track daily habits and goals with customizable templates and clean progress charts.',
+        image: 'https://i.ibb.co/DPM7ZYJM/Tracker-Fy.png',
+        alt: 'TrackerFy'
+      },
+      budgetfy: {
+        title: '<span style="color:white;">Budget</span><span style="color:#4FA985;">Fy</span>',
+        description: 'Manage your personal or business finances with a friendly budgeting toolkit.',
+        image: '', alt: 'BudgetFy'
+      },
+      investfy: {
+        title: '<span style="color:white;">Invest</span><span style="color:#36A96B;">Fy</span>',
+        description: 'Plan and follow your portfolio with allocations, performance, and rebalancing helpers.',
+        image: 'https://i.ibb.co/7xvjhYzg/InvestFy.png',
+        alt: 'InvestFy'
+      },
+      loanfy: {
+        title: '<span style="color:white;">Loan</span><span style="color:#2D6B4F;">Fy</span>',
+        description: 'Calculate payments and track your debt with smart amortization views. <strong>Free template</strong> — download it via our Instagram.',
+        image: 'https://i.ibb.co/ZR68WtPR/LoanFy.png',
+        alt: 'LoanFy'
+      }
+    };
+
+    function showProductPage(id){
+      const page = document.getElementById('productPage');
+      const title = document.getElementById('productPageTitle');
+      const desc  = document.getElementById('productPageDescription');
+      const imgBox= document.getElementById('productImage');
+      const data = productData[id];
+
+      title.innerHTML = data.title;
+      desc.innerHTML  = data.description;
+      imgBox.innerHTML = data.image
+        ? `<img src="${data.image}" alt="${data.alt}">`
+        : `<span style="color:#8DCFB0;font-weight:700;">Preview coming soon</span>`;
+
+      document.getElementById('etsyButton').onclick = () => openEtsy(id);
       page.classList.add('show');
-      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts},{name:productId.charAt(0).toUpperCase()+productId.slice(1), action:()=>showProductPage(productId)}]);
-      playSound(523,.3);
     }
-
     function hideProductPage(){
       document.getElementById('productPage').classList.remove('show');
-      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Productos', action:showProducts}]);
-      playSound(392,.2);
     }
 
-    function showAboutPage(){
-      document.getElementById('aboutPage').classList.add('show');
-      updateBreadcrumbs([{name:'Inicio', action:goHome},{name:'Acerca de', action:showAboutPage}]);
-      playSound(659,.3);
-    }
-    function hideAboutPage(){
-      document.getElementById('aboutPage').classList.remove('show');
-      document.getElementById('breadcrumbs').classList.remove('show');
-      playSound(392,.2);
-    }
+    function showAboutPage(){ document.getElementById('aboutPage').classList.add('show'); }
+    function hideAboutPage(){ document.getElementById('aboutPage').classList.remove('show'); }
 
     function openEtsy(product){
-      // Reemplaza por tus URLs reales si quieres
-      window.open('https://www.etsy.com','_blank');
-      playSound(784,.2);
+      // Replace with your real product URLs if needed
+      window.open('https://www.etsy.com', '_blank');
     }
 
-    // Tema
-    function toggleTheme(){
-      const body=document.body, themeToggle=document.getElementById('themeToggle');
-      body.classList.toggle('light-theme');
-      if(body.classList.contains('light-theme')){ themeToggle.textContent='◑'; localStorage.setItem('theme','light'); }
-      else{ themeToggle.textContent='◐'; localStorage.setItem('theme','dark'); }
-      playSound(440,.1);
+    /* ========= EASTER EGG ========= */
+    function initEasterEgg(){
+      let seq=[], target=['e','x','c','e','l','f','y'];
+      document.addEventListener('keydown', e=>{
+        seq.push(e.key.toLowerCase());
+        if(seq.length>target.length) seq.shift();
+        if(JSON.stringify(seq)===JSON.stringify(target)) openEgg();
+      });
+    }
+    function openEgg(){
+      const m=document.getElementById('easterEggModal');
+      m.style.top='0';
+      setTimeout(()=>{ m.classList.add('show'); }, 10);
+    }
+    function closeEasterEgg(){
+      const m=document.getElementById('easterEggModal');
+      m.classList.remove('show');
+      setTimeout(()=>{ m.style.top='100vh'; }, 400);
     }
 
-    // Click SFX
-    document.addEventListener('click', e=>{
-      if (e.target.tagName==='BUTTON' || e.target.onclick || e.target.style.cursor==='pointer') playSound(523,.05);
-    });
-
-    // Init
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const savedTheme=localStorage.getItem('theme'); const themeToggle=document.getElementById('themeToggle');
-      if(savedTheme==='light'){ document.body.classList.add('light-theme'); themeToggle.textContent='◑'; }
-      hideLoadingScreen();
-    });
-
-    // Exponer funciones usadas en atributos inline (por compatibilidad)
-    window.goHome=goHome; window.showProducts=showProducts; window.showFolder=showFolder;
-    window.showProductPage=showProductPage; window.hideProductPage=hideProductPage;
-    window.showAboutPage=showAboutPage; window.hideAboutPage=hideAboutPage;
-    window.openEtsy=openEtsy; window.toggleTheme=toggleTheme; window.closeEasterEgg=closeEasterEgg;
+    /* ========= Expose for inline handlers ========= */
+    window.toggleTheme=toggleTheme;
+    window.showProducts=showProducts;
+    window.showFolder=showFolder;
+    window.showProductPage=showProductPage;
+    window.hideProductPage=hideProductPage;
+    window.showAboutPage=showAboutPage;
+    window.hideAboutPage=hideAboutPage;
+    window.closeEasterEgg=closeEasterEgg;
+    window.openEtsy=openEtsy;
   </script>
 </body>
 </html>
