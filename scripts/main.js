@@ -1,4 +1,4 @@
-/* ================== THEME ================== */
+/* ================== THEME (fix: works via inline + listener) ================== */
 function toggleTheme(){
   const body = document.body;
   const btn = document.getElementById('themeToggle');
@@ -10,18 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('theme');
   const btn = document.getElementById('themeToggle');
   if (saved === 'light'){ document.body.classList.add('light-theme'); if(btn) btn.textContent='◑'; }
-  // FIX: ensure the toggle button works
   if (btn) btn.addEventListener('click', toggleTheme);
 });
 
-/* ================== PRELOADER (bar only) ================== */
+/* ================== PRELOADER (bar + percentage) ================== */
 (function preloader(){
   const scr = document.getElementById('loadingScreen');
   const bar = document.getElementById('loadingProgress');
+  const pct = document.getElementById('loadingPercent');
   let p = 0;
   const id = setInterval(()=>{
     p = Math.min(100, p + Math.random()*4 + 1.5);
     bar.style.width = p + '%';
+    if (pct) pct.textContent = Math.floor(p) + '%';
     if (p >= 100){
       clearInterval(id);
       setTimeout(()=>{ scr.style.opacity='0'; setTimeout(()=>{scr.style.display='none';},600); },200);
@@ -29,13 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 40);
 })();
 
-/* ================== DATA CANVAS (smaller glyphs) ================== */
+/* ================== DATA CANVAS (glyphs) ================== */
 const canvas = document.getElementById('dataCanvas');
 const ctx = canvas.getContext('2d', { alpha:true });
 let W, H, glyphs = [], mouse = {x:-9999, y:-9999};
 
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-const COUNT = 80;         // keep amount; make each glyph smaller/delicate
+const COUNT = 80;
 const RADIUS = 120;
 const FORCE = 0.08;
 const SPEED = 0.35;
@@ -53,8 +54,8 @@ function createGlyph(){
     vx: (Math.random()*2-1)*SPEED,
     vy: (Math.random()*2-1)*SPEED,
     ch: CHARS[Math.floor(Math.random()*CHARS.length)],
-    size: Math.random()*6 + 8,      // **smaller**: 8–14px
-    alpha: Math.random()*0.25 + 0.25 // **more delicate** opacity: 0.25–0.50
+    size: Math.random()*6 + 8,      // delicate: 8–14px
+    alpha: Math.random()*0.25 + 0.25 // delicate opacity: 0.25–0.50
   };
 }
 for (let i=0;i<COUNT;i++) glyphs.push(createGlyph());
