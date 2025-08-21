@@ -1,17 +1,37 @@
-/* ================== THEME (fix: works via inline + listener) ================== */
-function toggleTheme(){
+/* ================== THEME (FIX) ================== */
+/* Bloque más robusto: aplica estado guardado, actualiza el icono y
+   asegura el listener del botón aunque el inline falle. */
+(function initTheme(){
   const body = document.body;
-  const btn = document.getElementById('themeToggle');
-  body.classList.toggle('light-theme');
-  btn.textContent = body.classList.contains('light-theme') ? '◑' : '◐';
-  localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('theme');
-  const btn = document.getElementById('themeToggle');
-  if (saved === 'light'){ document.body.classList.add('light-theme'); if(btn) btn.textContent='◑'; }
-  if (btn) btn.addEventListener('click', toggleTheme);
-});
+  const btn  = document.getElementById('themeToggle');
+
+  function apply(theme){
+    if (theme === 'light'){
+      body.classList.add('light-theme');
+      if (btn) btn.textContent = '◑';
+    } else {
+      body.classList.remove('light-theme');
+      if (btn) btn.textContent = '◐';
+    }
+    localStorage.setItem('theme', theme);
+  }
+
+  // Exponer para el onclick inline si existe
+  window.toggleTheme = function(){
+    const next = body.classList.contains('light-theme') ? 'dark' : 'light';
+    apply(next);
+  };
+
+  // Estado inicial desde localStorage
+  const saved = localStorage.getItem('theme') || 'dark';
+  apply(saved);
+
+  // Listener defensivo (aunque ya haya onclick inline)
+  if (btn) {
+    btn.removeEventListener('click', window.toggleTheme);
+    btn.addEventListener('click', window.toggleTheme);
+  }
+})();
 
 /* ================== PRELOADER (bar + percentage) ================== */
 (function preloader(){
@@ -54,8 +74,8 @@ function createGlyph(){
     vx: (Math.random()*2-1)*SPEED,
     vy: (Math.random()*2-1)*SPEED,
     ch: CHARS[Math.floor(Math.random()*CHARS.length)],
-    size: Math.random()*6 + 8,      // delicate: 8–14px
-    alpha: Math.random()*0.25 + 0.25 // delicate opacity: 0.25–0.50
+    size: Math.random()*6 + 8,      // delicado: 8–14px
+    alpha: Math.random()*0.25 + 0.25 // opacidad suave: 0.25–0.50
   };
 }
 for (let i=0;i<COUNT;i++) glyphs.push(createGlyph());
@@ -177,8 +197,7 @@ function closeEasterEgg(){
   document.getElementById('easterEggModal').classList.remove('show');
 }
 
-/* expose for inline handlers */
-window.toggleTheme = toggleTheme;
+/* expose for inline handlers (sin cambios) */
 window.showProducts = showProducts;
 window.showFolder = showFolder;
 window.showProductPage = showProductPage;
