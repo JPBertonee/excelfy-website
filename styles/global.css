@@ -73,11 +73,31 @@ body.light-theme{
   transition:transform .8s cubic-bezier(.25,.46,.45,.94); z-index:10;
 }
 .folder-container.opened{ transform:translateX(-60vw) scale(.6); }
-.folder{ width:60vmin; height:45vmin; cursor:pointer; position:relative; }
+.folder{
+  width:60vmin; height:45vmin; cursor:pointer; position:relative;
+  transform-origin:center center;
+}
 .folder-icon{ filter:drop-shadow(0 12px 28px rgba(141,207,176,.30)); }
 .light-theme .folder-icon{ filter:drop-shadow(0 12px 28px rgba(32,64,52,.28)); }
 .folder:hover{ transform:scale(1.02); }
 .folder:active{ transform:scale(.98); }
+
+/* --- Folder heartbeat (idle pulse) --- */
+@keyframes folderPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+/* Pulsa solo cuando está en reposo; si se abre o se pasa el mouse, se detiene */
+.folder:not(:hover){
+  animation: folderPulse 2.2s ease-in-out infinite;
+}
+.folder-container.opened .folder{
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce){
+  .folder{ animation: none !important; }
+}
 
 /* Products (list) */
 .products-container{
